@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ProfPulse Extension - Test Page</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8fafc;
+      color: #334155;
+      padding: 40px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: #1e293b;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 12px;
+    }
+    .hint {
+      font-size: 0.875rem;
+      color: #64748b;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05);
+    }
+    th, td {
+      padding: 16px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    th {
+      background-color: #f1f5f9;
+      color: #475569;
+      font-weight: 600;
+    }
+    .campus_block { font-weight: bold; color: #1e293b; }
+    .instructional_method_block { color: #475569; font-size: 0.85rem; }
+    .location_block { color: #64748b; font-size: 0.85rem; }
+    .rightnclear { margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+
+  <h1>CUNY Course Registration Simulator</h1>
+  <p class="hint">
+    This page matches the exact HTML structure used in the real <strong>CUNY Schedule Builder</strong>. 
+    The extension will inject buttons directly next to the instructor's name matching the real portal's selector rules.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Course Details</th>
+        <th>Schedule & Location (CUNY Schedule Builder Structure)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Test Case 1: Hadley Black at Baruch College -->
+      <tr>
+        <td>
+          <strong>MGT 3120</strong><br>
+          Organizational Behavior
+        </td>
+        <td align="right">
+          <div title="College: Baruch College" class="campus_block rightnclear">Baruch College</div>
+          <div class="instructional_method_block rightnclear" title="Instruction Mode: In Person">In Person</div>
+          <div class="rightnclear">
+            <span class="location_block" title="Building and Room Number">Newman Vertical Campus Rm 9-120<br></span>
+          </div>
+          <!-- Real Professor Element -->
+          <div class="rightnclear" title="Instructor(s)">Hadley Black</div>
+          <div class="credits_block rightnclear">3.0 Credits</div>
+        </td>
+      </tr>
+
+      <!-- Test Case 2: Rosario Gennaro at CCNY -->
+      <tr>
+        <td>
+          <strong>CSC 22000</strong><br>
+          Algorithms
+        </td>
+        <td align="right">
+          <div title="College: City College" class="campus_block rightnclear">City College</div>
+          <div class="instructional_method_block rightnclear" title="Instruction Mode: In Person">In Person</div>
+          <div class="rightnclear">
+            <span class="location_block" title="Building and Room Number">Shepard Hall Rm 290<br></span>
+          </div>
+          <!-- Real Professor Element -->
+          <div class="rightnclear" title="Instructor(s)">Rosario Gennaro</div>
+          <div class="credits_block rightnclear">3.0 Credits</div>
+        </td>
+      </tr>
+
+      <!-- Test Case 3: Staff (Should NOT show button) -->
+      <tr>
+        <td>
+          <strong>CSC 10300</strong><br>
+          Intro to Computer Science
+        </td>
+        <td align="right">
+          <div title="College: City College" class="campus_block rightnclear">City College</div>
+          <div class="instructional_method_block rightnclear" title="Instruction Mode: Online">Online</div>
+          <div class="rightnclear">
+            <span class="location_block" title="Building and Room Number">Online Session<br></span>
+          </div>
+          <!-- Invalid Professor Name -->
+          <div class="rightnclear" title="Instructor(s)">Staff</div>
+          <div class="credits_block rightnclear">3.0 Credits</div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>
