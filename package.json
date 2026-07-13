@@ -1,7 +1,7 @@
 {
   "name": "cuny-plus",
   "displayName": "CUNY Plus",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "CUNY Course Rank Catcher & Utilities",
   "author": "Steven Huang",
   "scripts": {
