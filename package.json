@@ -1,8 +1,8 @@
 {
-  "name": "profpulse-extension",
-  "displayName": "Profpulse extension",
+  "name": "cuny-plus",
+  "displayName": "CUNY Plus",
   "version": "0.0.1",
-  "description": "CUNY Course Rank Catcher",
+  "description": "CUNY Course Rank Catcher & Utilities",
   "author": "Steven Huang",
   "scripts": {
     "dev": "plasmo dev",
@@ -28,6 +28,7 @@
   "manifest": {
     "host_permissions": [
       "https://*/*"
-    ]
+    ],
+    "permissions": ["storage"]
   }
 }

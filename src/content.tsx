@@ -1,6 +1,6 @@
 import cssText from "data-text:~style.css"
 import type { PlasmoCSConfig, PlasmoGetInlineAnchorList, PlasmoGetStyle } from "plasmo"
-import ProfPulseButton from "~features/ratings/components/ProfPulseButton"
+import RMPButton from "~features/ratings/components/RMPButton"
 
 // Match CUNY domains and localhost for testing
 export const config: PlasmoCSConfig = {
@@ -25,23 +25,24 @@ export const getStyle: PlasmoGetStyle = () => {
   })
 
   const styleElement = document.createElement("style")
-  styleElement.textContent = updatedCssText
+  styleElement.textContent = updatedCssText + "\n :host { z-index: 9999 !important; }"
   return styleElement
 }
 
-console.log("ProfPulse Extension: Content Script loaded on", window.location.href)
+const globalStyle = document.createElement("style")
+globalStyle.textContent = "plasmo-csui { z-index: 9999 !important; }"
+document.head.appendChild(globalStyle)
+
 
 // Select all elements containing professor names
 // We target both the actual CUNY Schedule Builder selector: div.rightnclear[title="Instructor(s)"]
 // and our local simulator selector: .instructor-name
 export const getInlineAnchorList: PlasmoGetInlineAnchorList = async () => {
-  console.log("ProfPulse Extension: getInlineAnchorList is running...")
   const elements = document.querySelectorAll('div.rightnclear[title="Instructor(s)"], .instructor-name')
-  console.log(`ProfPulse Extension: Found ${elements.length} professor elements.`)
   return Array.from(elements).map((el) => ({
     element: el,
     insertPosition: "afterend"
   }))
 }
 
-export default ProfPulseButton
+export default RMPButton

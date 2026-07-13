@@ -6,6 +6,7 @@ export interface RMPRating {
   legacyId?: string
   id?: string
   schoolName?: string
+  tags?: string[]
 }
 
 export interface RMPRatingPayload {
@@ -17,5 +18,6 @@ export interface RMPRatingPayload {
   legacyId?: string
   id?: string
   schoolName?: string
+  tags?: string[]
   error?: string
 }

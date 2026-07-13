@@ -20,6 +20,13 @@ export async function fetchRMPRating(professorName: string): Promise<RMPRatingPa
                 name
                 id
               }
+              ratings(first: 20) {
+                edges {
+                  node {
+                    ratingTags
+                  }
+                }
+              }
             }
           }
         }
@@ -79,6 +86,25 @@ export async function fetchRMPRating(professorName: string): Promise<RMPRatingPa
     numRatings: matchedNode.numRatings,
     legacyId: matchedNode.legacyId,
     id: matchedNode.id,
-    schoolName: matchedNode?.school?.name
+    schoolName: matchedNode?.school?.name,
+    tags: (() => {
+      if (!matchedNode.ratings?.edges) return []
+      const tagCounts: Record<string, number> = {}
+      matchedNode.ratings.edges.forEach((edge: any) => {
+        const rawTags = edge?.node?.ratingTags || ""
+        if (rawTags) {
+          rawTags.split("--").forEach((tag: string) => {
+            // Normalize tag casing to match our emoji dictionary (e.g. "Tough grader" -> "Tough Grader")
+            const cleanTag = tag.trim().split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase()).join(' ')
+            if (cleanTag) {
+              tagCounts[cleanTag] = (tagCounts[cleanTag] || 0) + 1
+            }
+          })
+        }
+      })
+      return Object.entries(tagCounts)
+        .sort((a, b) => b[1] - a[1])
+        .map(([tag]) => tag)
+    })()
   }
 }
