@@ -2,6 +2,8 @@ import { useEffect, useState } from "react"
 
 import "~style.css"
 
+import iconData from "data-base64:~../assets/icon.png"
+
 // Brand tokens matching the CUNY+ logo exactly
 const NAVY = "#1B3A6B"
 const NAVY_DARK = "#142D55"
@@ -44,24 +46,21 @@ function IndexPopup() {
     <div style={{ width: 288, fontFamily: "'Segoe UI', system-ui, sans-serif", background: WHITE, color: "#1a1a2e" }}>
       {/* Header — matches logo: navy bg, white bold CUNY+ text */}
       <div style={{ background: NAVY, padding: "12px 16px", display: "flex", alignItems: "center", gap: 10 }}>
-        {/* Mini logo badge */}
-        <div style={{
-          background: WHITE,
-          borderRadius: 6,
-          width: 32,
-          height: 32,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0
-        }}>
-          <span style={{ color: NAVY, fontWeight: 800, fontSize: 11, letterSpacing: "0.04em", lineHeight: 1 }}>
-            CUNY+
-          </span>
-        </div>
+        {/* Real logo icon */}
+        <img 
+          src={iconData} 
+          alt="CUNY+ Logo"
+          style={{
+            width: 40,
+            height: 40,
+            borderRadius: 8,
+            flexShrink: 0,
+            objectFit: "cover",
+            backgroundColor: WHITE
+          }} 
+        />
         <div>
           <p style={{ margin: 0, color: WHITE, fontWeight: 700, fontSize: 14, letterSpacing: "0.02em" }}>CUNY Plus</p>
-          <p style={{ margin: 0, color: "rgba(255,255,255,0.6)", fontSize: 10 }}>Browser Extension</p>
         </div>
       </div>
 
@@ -217,6 +216,20 @@ function IndexPopup() {
             </button>
           </div>
         )}
+
+        {/* RMP Status */}
+        <div style={{ 
+          paddingTop: 16, 
+          borderTop: "1px solid #EEF2F8", 
+          display: "flex", 
+          alignItems: "center", 
+          gap: 8 
+        }}>
+          <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: "#16A34A" }}></span>
+          <p style={{ margin: 0, fontSize: 11, color: "#4B5563", fontWeight: 500 }}>
+            RMP integration is active
+          </p>
+        </div>
       </div>
 
       {/* Footer */}
