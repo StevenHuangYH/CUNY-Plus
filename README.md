@@ -21,6 +21,15 @@ Instead of copying and pasting professor names into a new tab, CUNY Plus does th
 
 The extension is built on top of the [Plasmo](https://docs.plasmo.com/) framework, using React and Tailwind CSS. We use Shadow DOM injection to make sure our UI components don't clash with the older styling of the CUNY portals. 
 
+## Installation
+
+### Via the Chrome Web Store (Recommended)
+*Note: The extension is currently pending review in the Chrome Web Store. The direct link will be added here as soon as it is published.*
+
+1. Go to the Chrome Web Store (link coming soon).
+2. Click **Add to Chrome** to install.
+3. Pin the extension to your toolbar for quick access to your login configurations.
+
 ## Want to test it locally?
 
 If you want to hack on this or just run it yourself:
