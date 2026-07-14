@@ -2,7 +2,7 @@
   "name": "cuny-plus",
   "displayName": "CUNY Plus",
   "version": "0.1.1",
-  "description": "CUNY Course Rank Catcher & Utilities",
+  "description": "CUNY Plus & Utilities",
   "author": "Steven Huang",
   "scripts": {
     "dev": "plasmo dev",
@@ -27,7 +27,8 @@
   },
   "manifest": {
     "host_permissions": [
-      "https://*/*"
+      "https://*.cuny.edu/*",
+      "https://www.ratemyprofessors.com/*"
     ],
     "permissions": ["storage"]
   }

@@ -2,13 +2,10 @@ import cssText from "data-text:~style.css"
 import type { PlasmoCSConfig, PlasmoGetInlineAnchorList, PlasmoGetStyle } from "plasmo"
 import RMPButton from "~features/ratings/components/RMPButton"
 
-// Match CUNY domains and localhost for testing
+// Match CUNY domains
 export const config: PlasmoCSConfig = {
   matches: [
-    "https://*.cuny.edu/*",
-    "http://localhost:*/*",
-    "http://127.0.0.1:*/*",
-    "file://*/*"
+    "https://*.cuny.edu/*"
   ]
 }
 
