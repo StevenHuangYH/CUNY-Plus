@@ -44,6 +44,8 @@ The simulator offers editable instructor and campus fields for checking unknown 
 
 Run `npm test`, `npm run typecheck`, and `npm run build` before shipping. The test tooling supports Node 22 or newer. Automatic school matching requires a recognized [CUNY school name](https://www.cuny.edu/about/colleges/) and an exact comparison after normalizing case and whitespace; unfamiliar aliases deliberately go to candidate selection. Professor searches time out after ten seconds and show a retry action. Missing scores display as N/A.
 
+Use `npm ci` for a reproducible install. Installation applies a checked security patch to Plasmo's older Parcel development server; the development, build, and package scripts verify it before running. `npm audit` still reports four moderate entries for this locally patched advisory. See [dependency security maintenance](docs/maintenance/dependency-security.md) for the version overrides, regression test, and upstream limitation.
+
 ## Feedback & Contributions
 
 If you find a bug, want a new feature, or just want to help out, feel free to open an issue or submit a pull request!

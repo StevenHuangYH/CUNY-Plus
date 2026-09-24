@@ -5,10 +5,14 @@
   "description": "CUNY Plus & Utilities",
   "author": "Steven Huang",
   "scripts": {
+    "postinstall": "node scripts/patch-parcel-cors.mjs",
+    "predev": "node scripts/patch-parcel-cors.mjs --check",
     "dev": "plasmo dev",
+    "prebuild": "node scripts/patch-parcel-cors.mjs --check",
     "build": "plasmo build",
+    "prepackage": "node scripts/patch-parcel-cors.mjs --check",
     "package": "plasmo package",
-    "test": "vitest run",
+    "test": "vitest run && node --test tests/parcel-cors.test.mjs",
     "typecheck": "tsc --noEmit",
     "simulator": "node scripts/serve-fixture.mjs"
   },
@@ -27,10 +31,23 @@
     "@types/react": "18.2.48",
     "@types/react-dom": "18.2.18",
     "jsdom": "^26.1.0",
-    "postcss": "8.4.33",
+    "postcss": "8.5.28",
     "prettier": "3.2.4",
     "typescript": "5.3.3",
-    "vitest": "^3.2.7"
+    "vite": "6.4.3",
+    "vitest": "4.1.11"
+  },
+  "overrides": {
+    "@parcel/core": "2.9.3",
+    "@plasmohq/parcel-resolver-post": "0.4.6",
+    "@plasmohq/parcel-transformer-manifest": "0.21.1",
+    "browserslist": "4.29.1",
+    "fflate": "0.8.3",
+    "htmlnano": "2.0.3",
+    "msgpackr": "1.12.1",
+    "sharp": "0.35.4",
+    "svelte": "5.57.1",
+    "svgo@^2": "2.8.4"
   },
   "manifest": {
     "host_permissions": [
