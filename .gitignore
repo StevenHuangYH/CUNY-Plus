@@ -8,6 +8,7 @@
 
 # testing
 /coverage
+/.vitest
 
 #cache
 .turbo
@@ -24,6 +25,7 @@ yarn-error.log*
 
 # local env files
 .env*
+!.env.development
 
 out/
 build/
