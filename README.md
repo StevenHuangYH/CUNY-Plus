@@ -46,6 +46,8 @@ Run `npm test`, `npm run typecheck`, and `npm run build` before shipping. The te
 
 Use `npm ci` for a reproducible install. Installation applies a checked security patch to Plasmo's older Parcel development server; the development, build, and package scripts verify it before running. `npm audit` still reports four moderate entries for this locally patched advisory. See [dependency security maintenance](docs/maintenance/dependency-security.md) for the version overrides, regression test, and upstream limitation.
 
+Auto Login shows “Saved” only after settings are stored successfully. A failed save keeps your input available for retry. Each save permits one automatic submission per CUNY Login tab session; after correcting credentials, click Save again to request a new attempt. Repeated login redirects do not trigger repeated attempts. Disabling Auto Login clears stored credentials after the write succeeds. See [auto-login reliability](docs/design/auto-login-reliability.md) for behavior and test coverage.
+
 ## Feedback & Contributions
 
 If you find a bug, want a new feature, or just want to help out, feel free to open an issue or submit a pull request!
