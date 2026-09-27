@@ -25,9 +25,7 @@ The extension is built on top of the [Plasmo](https://docs.plasmo.com/) framewor
 
 ### Via the Chrome Web Store (Recommended)
 
-_Note: The extension is currently pending review in the Chrome Web Store. The direct link will be added here as soon as it is published._
-
-1. Go to the Chrome Web Store (link coming soon).
+1. Open [CUNY Plus in the Chrome Web Store](https://chromewebstore.google.com/detail/cuny-plus/lljobghlepaheciapaeeccpidadfofod).
 2. Click **Add to Chrome** to install.
 3. Pin the extension to your toolbar for quick access to your login configurations.
 
