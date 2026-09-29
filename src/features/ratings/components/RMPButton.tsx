@@ -2,15 +2,24 @@ import type { PlasmoCSUIProps } from "plasmo"
 import { useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 
+import { useTheme } from "../../theme/useTheme"
 import { isPlaceholder } from "../identity"
 import { useProfessorLookup } from "../useProfessorLookup"
 
 // Brand tokens — identical to popup.tsx and logo
 const NAVY = "#1B3A6B"
 const NAVY_DARK = "#142D55"
-const NAVY_LIGHT = "#EEF2F8"
 
 const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
+  const { dark, colors } = useTheme()
+  const actionStyle = {
+    background: colors.subtle,
+    color: colors.link,
+    border: `1px solid ${colors.border}`,
+    borderRadius: 6,
+    padding: "6px 8px",
+    cursor: "pointer"
+  }
   const {
     course,
     result,
@@ -141,30 +150,32 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
 
   // Score → color mapping, consistent with CUNY Plus palette
   const getRatingColor = (score?: number) => {
-    if (score === undefined) return "#94A3B8"
-    if (score >= 4.0) return "#16A34A"
-    if (score >= 3.0) return "#D97706"
-    return "#DC2626"
+    if (score === undefined) return colors.muted
+    if (score >= 4.0) return colors.success
+    if (score >= 3.0) return colors.warning
+    return colors.danger
   }
 
   const getRatingBg = (score?: number) => {
-    if (score === undefined) return "#F8FAFC"
-    if (score >= 4.0) return "#F0FDF4"
-    if (score >= 3.0) return "#FFFBEB"
-    return "#FFF1F2"
+    if (score === undefined) return colors.subtle
+    if (score >= 4.0) return colors.successBg
+    if (score >= 3.0) return colors.warningBg
+    return colors.dangerBg
   }
 
   const getDifficultyColor = (d?: number) => {
-    if (d === undefined) return "#94A3B8"
-    if (d <= 2.5) return "#16A34A"
-    if (d <= 3.5) return "#D97706"
-    return "#DC2626"
+    if (d === undefined) return colors.muted
+    if (d <= 2.5) return colors.success
+    if (d <= 3.5) return colors.warning
+    return colors.danger
   }
 
   return (
     <div
       ref={containerRef}
+      data-cuny-plus-ui
       style={{
+        colorScheme: dark ? "dark" : "light",
         display: "inline-block",
         position: "relative",
         marginLeft: 8,
@@ -188,8 +199,8 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
           letterSpacing: "0.02em",
           borderRadius: 20,
           border: `1.5px solid ${NAVY}`,
-          background: loading ? NAVY_LIGHT : NAVY,
-          color: loading ? NAVY : "#FFFFFF",
+          background: loading ? colors.subtle : NAVY,
+          color: loading ? colors.link : "#FFFFFF",
           cursor: loading ? "default" : "pointer",
           opacity: loading ? 0.7 : 1,
           transition: "all 0.15s ease",
@@ -219,16 +230,16 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
                 cx="12"
                 cy="12"
                 r="10"
-                stroke={NAVY}
+                stroke={colors.link}
                 strokeWidth="4"
               />
               <path
                 style={{ opacity: 0.75 }}
-                fill={NAVY}
+                fill={colors.link}
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               />
             </svg>
-            <span style={{ color: NAVY }}>Loading…</span>
+            <span style={{ color: colors.link }}>Loading…</span>
           </>
         ) : (
           <>
@@ -257,6 +268,7 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
         createPortal(
           <div
             ref={cardRef}
+            data-cuny-plus-ui
             role="dialog"
             aria-label={`Professor ratings for ${rating?.name ?? name}`}
             style={{
@@ -270,11 +282,13 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
               width: "max-content",
               minWidth: 240,
               maxWidth: 280,
-              background: "#FFFFFF",
+              background: colors.surface,
+              color: colors.text,
+              colorScheme: dark ? "dark" : "light",
               borderRadius: 12,
               boxShadow:
                 "0 10px 40px -10px rgba(27,58,107,0.25), 0 4px 12px -4px rgba(0,0,0,0.1)",
-              border: `1px solid ${NAVY_LIGHT}`,
+              border: `1px solid ${colors.border}`,
               overflowY: "auto",
               maxHeight: "80vh",
               fontFamily: "'Segoe UI', system-ui, sans-serif",
@@ -387,16 +401,16 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
                   <div
                     style={{
                       fontSize: 12,
-                      color: "#DC2626",
-                      background: "#FFF1F2",
+                      color: colors.danger,
+                      background: colors.dangerBg,
                       borderRadius: 8,
                       padding: "12px",
                       lineHeight: 1.5,
-                      border: "1px solid #FECDD3"
+                      border: `1px solid ${colors.danger}`
                     }}>
                     ⚠️ {error}
                   </div>
-                  <button type="button" onClick={search}>
+                  <button type="button" style={actionStyle} onClick={search}>
                     Retry search
                   </button>
                 </>
@@ -423,7 +437,7 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
                         style={{
                           fontSize: 13,
                           fontWeight: 600,
-                          color: "#374151"
+                          color: colors.muted
                         }}>
                         Overall Quality
                       </span>
@@ -465,7 +479,7 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
                       <span
                         style={{
                           fontSize: 11,
-                          color: "#94A3B8",
+                          color: colors.muted,
                           fontWeight: 600
                         }}>
                         / 5.0
@@ -482,7 +496,7 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
                     }}>
                     <div
                       style={{
-                        background: NAVY_LIGHT,
+                        background: colors.subtle,
                         borderRadius: 8,
                         padding: "8px 10px",
                         display: "flex",
@@ -494,7 +508,7 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
                         style={{
                           margin: 0,
                           fontSize: 11,
-                          color: "#4B5563",
+                          color: colors.muted,
                           fontWeight: 600,
                           marginBottom: 2
                         }}>
@@ -514,7 +528,7 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
                     </div>
                     <div
                       style={{
-                        background: NAVY_LIGHT,
+                        background: colors.subtle,
                         borderRadius: 8,
                         padding: "8px 10px",
                         display: "flex",
@@ -526,7 +540,7 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
                         style={{
                           margin: 0,
                           fontSize: 11,
-                          color: "#4B5563",
+                          color: colors.muted,
                           fontWeight: 600,
                           marginBottom: 2
                         }}>
@@ -537,7 +551,7 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
                           margin: 0,
                           fontSize: 16,
                           fontWeight: 700,
-                          color: NAVY
+                          color: colors.link
                         }}>
                         {rating.wouldTakeAgainPercent !== undefined &&
                         rating.wouldTakeAgainPercent !== -1
@@ -560,13 +574,13 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
                         <span
                           key={i}
                           style={{
-                            background: "#F3F4F6",
-                            color: "#4B5563",
+                            background: colors.subtle,
+                            color: colors.muted,
                             padding: "2px 8px",
                             borderRadius: 12,
                             fontSize: 10,
                             fontWeight: 600,
-                            border: "1px solid #E5E7EB"
+                            border: `1px solid ${colors.border}`
                           }}>
                           {tag}
                         </span>
@@ -575,7 +589,7 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
                         <span
                           style={{
                             fontSize: 10,
-                            color: "#9CA3AF",
+                            color: colors.muted,
                             padding: "2px 4px",
                             fontWeight: 600
                           }}>
@@ -592,7 +606,7 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
                       justifyContent: "space-between",
                       alignItems: "center",
                       fontSize: 11,
-                      color: "#9CA3AF",
+                      color: colors.muted,
                       marginTop: 2
                     }}>
                     <span style={{ fontWeight: 500 }}>
@@ -606,26 +620,26 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{
-                          color: NAVY,
+                          color: colors.link,
                           fontWeight: 600,
                           textDecoration: "none",
                           display: "flex",
                           alignItems: "center",
                           gap: 4,
                           padding: "4px 6px",
-                          background: NAVY_LIGHT,
+                          background: colors.subtle,
                           borderRadius: 6,
                           transition: "background 0.2s ease"
                         }}
                         onMouseEnter={(e) => {
                           ;(
                             e.currentTarget as HTMLAnchorElement
-                          ).style.background = "#D6E0F0"
+                          ).style.background = colors.hover
                         }}
                         onMouseLeave={(e) => {
                           ;(
                             e.currentTarget as HTMLAnchorElement
-                          ).style.background = NAVY_LIGHT
+                          ).style.background = colors.subtle
                         }}>
                         Full Profile
                         <svg
@@ -645,14 +659,17 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
                     )}
                   </div>
                   {result?.status === "candidates" && (
-                    <button type="button" onClick={() => select(null)}>
+                    <button
+                      type="button"
+                      style={actionStyle}
+                      onClick={() => select(null)}>
                       Choose another professor
                     </button>
                   )}
                 </>
               ) : result?.status === "candidates" ? (
                 <>
-                  <p style={{ margin: 0, fontSize: 12, color: "#374151" }}>
+                  <p style={{ margin: 0, fontSize: 12, color: colors.muted }}>
                     Confirm the professor before viewing ratings. Course campus:{" "}
                     {course.campus ?? "Unknown"}.
                   </p>
@@ -669,7 +686,7 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
                         key={candidate.legacyId}
                         style={{
                           padding: 10,
-                          border: `1px solid ${NAVY_LIGHT}`,
+                          border: `1px solid ${colors.border}`,
                           borderRadius: 8
                         }}>
                         <p style={{ margin: 0, fontWeight: 700, fontSize: 13 }}>
@@ -683,7 +700,7 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label={`Profile for ${candidate.name} at ${candidate.schoolName}`}
-                          style={{ color: NAVY, fontSize: 12 }}>
+                          style={{ color: colors.link, fontSize: 12 }}>
                           View profile
                         </a>
                         <button
@@ -705,14 +722,22 @@ const CUNYPlusButton = ({ anchor }: PlasmoCSUIProps) => {
                       </li>
                     ))}
                   </ul>
-                  <a href={searchUrl} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={searchUrl}
+                    style={{ color: colors.link }}
+                    target="_blank"
+                    rel="noopener noreferrer">
                     Search on RateMyProfessors
                   </a>
                 </>
               ) : result?.status === "empty" ? (
                 <>
                   <p>No professor profiles found.</p>
-                  <a href={searchUrl} target="_blank" rel="noopener noreferrer">
+                  <a
+                    href={searchUrl}
+                    style={{ color: colors.link }}
+                    target="_blank"
+                    rel="noopener noreferrer">
                     Search on RateMyProfessors
                   </a>
                 </>

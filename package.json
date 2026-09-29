@@ -1,7 +1,7 @@
 {
   "name": "cuny-plus",
   "displayName": "CUNY Plus",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "CUNY Plus & Utilities",
   "author": "Steven Huang",
   "scripts": {

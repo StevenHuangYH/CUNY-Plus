@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 
 import { readLoginSettings, saveLoginSettings } from "./features/login/settings"
+import { DarkModeButton } from "./features/theme/DarkModeButton"
+import { useTheme } from "./features/theme/useTheme"
 
 import "~style.css"
 
@@ -95,13 +97,17 @@ function IndexPopup() {
     }
   }
 
+  const { dark, colors } = useTheme()
+
   return (
     <div
+      data-cuny-plus-ui
       style={{
+        colorScheme: dark ? "dark" : "light",
         width: 288,
         fontFamily: "'Segoe UI', system-ui, sans-serif",
-        background: WHITE,
-        color: "#1a1a2e"
+        background: colors.surface,
+        color: colors.text
       }}>
       {/* Header — matches logo: navy bg, white bold CUNY+ text */}
       <div
@@ -147,6 +153,7 @@ function IndexPopup() {
           flexDirection: "column",
           gap: 16
         }}>
+        <DarkModeButton />
         {/* Auto Login row */}
         <div
           style={{
@@ -160,11 +167,11 @@ function IndexPopup() {
                 margin: 0,
                 fontSize: 13,
                 fontWeight: 600,
-                color: "#1a1a2e"
+                color: colors.text
               }}>
               Auto Login
             </p>
-            <p style={{ margin: "2px 0 0", fontSize: 11, color: "#888" }}>
+            <p style={{ margin: "2px 0 0", fontSize: 11, color: colors.muted }}>
               Fills credentials on CUNY Login
             </p>
           </div>
@@ -216,7 +223,7 @@ function IndexPopup() {
                   display: "block",
                   fontSize: 11,
                   fontWeight: 600,
-                  color: "#555",
+                  color: colors.muted,
                   marginBottom: 4
                 }}>
                 Username
@@ -236,20 +243,20 @@ function IndexPopup() {
                   width: "100%",
                   fontSize: 11,
                   padding: "8px 10px",
-                  border: "1.5px solid #D1D5DB",
+                  border: `1.5px solid ${colors.border}`,
                   borderRadius: 8,
                   outline: "none",
-                  background: WHITE,
+                  background: colors.surface,
                   boxSizing: "border-box",
                   fontFamily: "inherit",
-                  color: "#1a1a2e"
+                  color: colors.text
                 }}
                 onFocus={(e) => {
-                  e.target.style.borderColor = NAVY
-                  e.target.style.boxShadow = `0 0 0 3px ${NAVY}22`
+                  e.target.style.borderColor = colors.focus
+                  e.target.style.boxShadow = `0 0 0 3px ${colors.focus}55`
                 }}
                 onBlur={(e) => {
-                  e.target.style.borderColor = "#D1D5DB"
+                  e.target.style.borderColor = colors.border
                   e.target.style.boxShadow = "none"
                 }}
               />
@@ -263,7 +270,7 @@ function IndexPopup() {
                   display: "block",
                   fontSize: 11,
                   fontWeight: 600,
-                  color: "#555",
+                  color: colors.muted,
                   marginBottom: 4
                 }}>
                 Password
@@ -284,20 +291,20 @@ function IndexPopup() {
                     width: "100%",
                     fontSize: 11,
                     padding: "8px 32px 8px 10px",
-                    border: "1.5px solid #D1D5DB",
+                    border: `1.5px solid ${colors.border}`,
                     borderRadius: 8,
                     outline: "none",
-                    background: WHITE,
+                    background: colors.surface,
                     boxSizing: "border-box",
                     fontFamily: "inherit",
-                    color: "#1a1a2e"
+                    color: colors.text
                   }}
                   onFocus={(e) => {
-                    e.target.style.borderColor = NAVY
-                    e.target.style.boxShadow = `0 0 0 3px ${NAVY}22`
+                    e.target.style.borderColor = colors.focus
+                    e.target.style.boxShadow = `0 0 0 3px ${colors.focus}55`
                   }}
                   onBlur={(e) => {
-                    e.target.style.borderColor = "#D1D5DB"
+                    e.target.style.borderColor = colors.border
                     e.target.style.boxShadow = "none"
                   }}
                 />
@@ -316,7 +323,7 @@ function IndexPopup() {
                     padding: 0,
                     display: "flex",
                     alignItems: "center",
-                    color: "#999"
+                    color: colors.muted
                   }}>
                   {showPassword ? (
                     <svg
@@ -380,7 +387,7 @@ function IndexPopup() {
               }}>
               {saving ? "Saving…" : saved ? "✓ Saved" : "Save"}
             </button>
-            <p style={{ margin: 0, fontSize: 11, color: "#666" }}>
+            <p style={{ margin: 0, fontSize: 11, color: colors.muted }}>
               Save to enable Auto Login or retry once on the open CUNY Login
               page.
             </p>
@@ -388,7 +395,9 @@ function IndexPopup() {
         )}
 
         {error && (
-          <p role="alert" style={{ margin: 0, fontSize: 12, color: "#B91C1C" }}>
+          <p
+            role="alert"
+            style={{ margin: 0, fontSize: 12, color: colors.danger }}>
             {error}
           </p>
         )}
@@ -407,7 +416,7 @@ function IndexPopup() {
         <div
           style={{
             paddingTop: 16,
-            borderTop: "1px solid #EEF2F8",
+            borderTop: `1px solid ${colors.border}`,
             display: "flex",
             alignItems: "center",
             gap: 8
@@ -424,7 +433,7 @@ function IndexPopup() {
             style={{
               margin: 0,
               fontSize: 11,
-              color: "#4B5563",
+              color: colors.muted,
               fontWeight: 500
             }}>
             RMP integration is active
@@ -437,7 +446,7 @@ function IndexPopup() {
         style={{
           margin: 0,
           fontSize: 10,
-          color: "#B0B8C4",
+          color: colors.muted,
           textAlign: "center",
           paddingBottom: 12
         }}>

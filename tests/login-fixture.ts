@@ -11,7 +11,7 @@ export function connectLoginStorage(
   initial: Record<string, unknown> = credentials
 ) {
   let data = { ...initial }
-  let readError = false
+  let readError: string | undefined
   let writeError = false
   const listeners = new Set<
     (
@@ -21,18 +21,25 @@ export function connectLoginStorage(
   >()
   const runtime: { lastError?: { message: string } } = {}
   const get = vi.fn(
-    (_keys, callback?: (value: Record<string, unknown>) => void) => {
-      const error = readError
-      readError = false
+    (
+      keys: string | string[],
+      callback?: (value: Record<string, unknown>) => void
+    ) => {
+      const requested = typeof keys === "string" ? [keys] : keys
+      const error = readError !== undefined && requested.includes(readError)
+      if (error) readError = undefined
+      const result = Object.fromEntries(
+        requested.map((key) => [key, data[key]])
+      )
       if (callback) {
         if (error) runtime.lastError = { message: "Synthetic read failure" }
-        callback(error ? {} : { ...data })
+        callback(error ? {} : result)
         delete runtime.lastError
         return
       }
       return error
         ? Promise.reject(new Error("Synthetic read failure"))
-        : Promise.resolve({ ...data })
+        : Promise.resolve(result)
     }
   )
   const change = (next: Record<string, unknown>) => {
@@ -72,8 +79,8 @@ export function connectLoginStorage(
     get,
     set,
     change,
-    failRead: () => {
-      readError = true
+    failRead: (key = "autoLogin") => {
+      readError = key
     },
     failWrite: () => {
       writeError = true
