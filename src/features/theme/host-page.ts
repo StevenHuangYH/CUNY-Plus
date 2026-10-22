@@ -17,7 +17,8 @@ ${host("body")} { background-color: #20242c !important; color: #f1f5f9 !importan
    Keep background images, branded headers, calendar colors and status badges. */
 ${host(`.white-background, .courses_bg, .main_menu, .helpinfo, .requirement,
   .popup-wrapper, .morelink, .sdl_input label, .advSearchButton,
-  #page_criteria, #page_results, .table_container, .sresult, .subnavigation,
+  #page_criteria, #page_results, .reg_legend, .course_box, .legend_table,
+  .table_container, .sresult, .subnavigation,
   .course_cell_action, .linkBox, .share-link-input, .StuTableTitle, .StuTableData,
   .LegendLabel, .LegendItem, .selectize-dropdown, .selectize-input,
   .mdl-card, .mdl-dialog, #cboxLoadedContent, .form_wrapper, .login_form,

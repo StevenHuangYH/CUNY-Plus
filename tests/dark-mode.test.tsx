@@ -250,3 +250,17 @@ it("does not let a stale initial read overwrite a newer choice from another tab"
     "rgb(32, 36, 44)"
   )
 })
+
+it("darkens the visible Schedule Builder result cards", async () => {
+  const storage = connectLoginStorage()
+  portalStyle = document.createElement("style")
+  portalStyle.textContent = `.reg_legend, .course_box, .legend_table { background-color: white; color: black; }`
+  document.head.appendChild(portalStyle)
+  document.body.innerHTML = `<div id="page_results"><div id="flip_area"><div class="reg_legend"><div id="legend_box"><div class="course_box"><div class="legend_table">Course</div></div></div></div></div></div>`
+  stopHost = startHostTheme()
+  await act(async () => storage.change({ darkMode: true }))
+  for (const selector of [".reg_legend", ".course_box", ".legend_table"])
+    expect(getComputedStyle(document.querySelector(selector)!).backgroundColor).toBe(
+      "rgb(44, 52, 66)"
+    )
+})
