@@ -71,6 +71,7 @@
       layout.
     </p>
 
+    <section data-schedule-results data-term="Demo term" data-option="1 of 1">
     <table>
       <thead>
         <tr>
@@ -80,10 +81,10 @@
       </thead>
       <tbody>
         <!-- Test Case 1: Hadley Black at Baruch College -->
-        <tr>
+        <tr data-schedule-entry>
           <td>
-            <strong>MGT 3120</strong><br />
-            Organizational Behavior
+            <strong data-course-code>MGT 3120</strong><br />
+            <span data-course-name>Organizational Behavior</span>
           </td>
           <td align="right">
             <div
@@ -103,15 +104,17 @@
             </div>
             <!-- Real Professor Element -->
             <div class="rightnclear" title="Instructor(s)">Hadley Black</div>
+            <div data-meeting>Mon 9:00 AM–10:15 AM</div>
+            <div data-meeting>Wed 9:00 AM–10:15 AM</div>
             <div class="credits_block rightnclear">3.0 Credits</div>
           </td>
         </tr>
 
         <!-- Test Case 2: Rosario Gennaro at CCNY -->
-        <tr>
+        <tr data-schedule-entry>
           <td>
-            <strong>CSC 22000</strong><br />
-            Algorithms
+            <strong data-course-code>CSC 22000</strong><br />
+            <span data-course-name>Algorithms</span>
           </td>
           <td align="right">
             <div title="College: City College" class="campus_block rightnclear">
@@ -129,15 +132,16 @@
             </div>
             <!-- Real Professor Element -->
             <div class="rightnclear" title="Instructor(s)">Rosario Gennaro</div>
+            <div data-meeting>Tue 2:00 PM–3:15 PM</div>
             <div class="credits_block rightnclear">3.0 Credits</div>
           </td>
         </tr>
 
         <!-- Test Case 3: Staff (Should NOT show button) -->
-        <tr>
+        <tr data-schedule-entry>
           <td>
-            <strong>CSC 10300</strong><br />
-            Intro to Computer Science
+            <strong data-course-code>CSC 10300</strong><br />
+            <span data-course-name>Intro to Computer Science</span>
           </td>
           <td align="right">
             <div title="College: City College" class="campus_block rightnclear">
@@ -155,11 +159,13 @@
             </div>
             <!-- Invalid Professor Name -->
             <div class="rightnclear" title="Instructor(s)">Staff</div>
+            <div data-async>Online-Asynchronous</div>
             <div class="credits_block rightnclear">3.0 Credits</div>
           </td>
         </tr>
       </tbody>
     </table>
+    </section>
 
     <section style="margin-top: 32px">
       <h2>Editable course context</h2>

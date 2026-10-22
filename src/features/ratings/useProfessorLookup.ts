@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from "react"
 
+import {
+  forgetRatingSnapshot,
+  ratingContextKey,
+  recordRatingSnapshot
+} from "../schedule-copy/ratings"
 import { cleanProfessorName, isPlaceholder } from "./identity"
 import type {
   ProfessorCandidate,
@@ -20,6 +25,13 @@ function readCourse(element?: Element): ProfessorQuery {
   }
 }
 
+function courseKey(element?: Element): string {
+  return JSON.stringify({
+    course: readCourse(element),
+    context: element ? ratingContextKey(element) : null
+  })
+}
+
 /** Keeps a lookup and a student's choice tied to the live course context. */
 export function useProfessorLookup(element?: Element) {
   const [course, setCourse] = useState(() => readCourse(element))
@@ -30,7 +42,7 @@ export function useProfessorLookup(element?: Element) {
   const requestId = useRef(0)
 
   useEffect(() => {
-    let key = JSON.stringify(readCourse(element))
+    let key = courseKey(element)
     const reset = () => {
       requestId.current++
       setCourse(readCourse(element))
@@ -41,7 +53,7 @@ export function useProfessorLookup(element?: Element) {
     }
     reset()
     const observer = new MutationObserver(() => {
-      const next = JSON.stringify(readCourse(element))
+      const next = courseKey(element)
       if (next !== key) {
         key = next
         reset()
@@ -55,7 +67,22 @@ export function useProfessorLookup(element?: Element) {
         characterData: true,
         subtree: true,
         attributes: true,
-        attributeFilter: ["class"]
+        attributeFilter: ["class", "data-option"]
+      })
+    const option = element?.closest("[data-schedule-results]")
+    if (option && option !== scope)
+      observer.observe(option, {
+        attributes: true,
+        attributeFilter: ["data-option"]
+      })
+    const liveNavigation = element
+      ?.closest("#page_results")
+      ?.querySelector(".results-with-schedules")
+    if (liveNavigation)
+      observer.observe(liveNavigation, {
+        childList: true,
+        characterData: true,
+        subtree: true
       })
     return () => {
       requestId.current++
@@ -66,7 +93,7 @@ export function useProfessorLookup(element?: Element) {
   const search = () => {
     const input = readCourse(element)
     if (isPlaceholder(input.professorName)) return
-    const key = JSON.stringify(input)
+    const key = courseKey(element)
     const currentId = ++requestId.current
     setCourse(input)
     setLoading(true)
@@ -75,11 +102,7 @@ export function useProfessorLookup(element?: Element) {
     setOpen(true)
 
     const finish = (response: ProfessorLookupResult) => {
-      if (
-        currentId !== requestId.current ||
-        key !== JSON.stringify(readCourse(element))
-      )
-        return
+      if (currentId !== requestId.current || key !== courseKey(element)) return
       setResult(response)
       setLoading(false)
     }
@@ -109,6 +132,22 @@ export function useProfessorLookup(element?: Element) {
 
   const rating =
     selected ?? (result?.status === "matched" ? result.professor : null)
+  useEffect(() => {
+    if (element)
+      recordRatingSnapshot(element, {
+        displayedName: course.professorName,
+        result,
+        rating,
+        loading
+      })
+  }, [element, course.professorName, result, rating, loading])
+
+  useEffect(
+    () => () => {
+      if (element) forgetRatingSnapshot(element)
+    },
+    [element]
+  )
   return {
     course,
     result,

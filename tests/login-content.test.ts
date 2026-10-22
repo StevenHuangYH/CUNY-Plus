@@ -122,8 +122,11 @@ it("does not submit when reading settings or persisting the session guard fails"
   await import("../src/contents/content-login")
   await vi.advanceTimersByTimeAsync(1000)
   expect(form.submit).not.toHaveBeenCalled()
-  vi.spyOn(Storage.prototype, "setItem").mockImplementationOnce(() => {
-    throw new Error("Synthetic unavailable session storage")
+  vi.stubGlobal("sessionStorage", {
+    getItem: () => null,
+    setItem: () => {
+      throw new Error("Synthetic unavailable session storage")
+    }
   })
   storage.change({ autoLoginRevision: "saved-revision-2" })
   await vi.advanceTimersByTimeAsync(1000)

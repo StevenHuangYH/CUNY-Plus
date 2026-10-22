@@ -211,3 +211,53 @@ it("keeps a closed loading card closed when the response arrives", async () => {
   })
   expect(screen.queryByRole("dialog")).toBeNull()
 })
+
+it("clears a professor choice when the displayed schedule option changes", async () => {
+  const sendMessage = connectSearch()
+  const user = userEvent.setup()
+  const current = course("Alex Chen", "Hunter College")
+  const result = document.createElement("section")
+  result.setAttribute("data-schedule-results", "")
+  result.setAttribute("data-option", "1 of 2")
+  current.instructor.closest("table")!.replaceWith(result)
+  result.appendChild(current.instructor.closest("table")!)
+  render(<RMPButton anchor={current.anchor} />)
+  await user.click(screen.getByTitle(/view.*ratings/i))
+  await user.click(
+    await screen.findByRole("button", {
+      name: "Show ratings for Alex Chen at Baruch College"
+    })
+  )
+  expect(screen.getByText("Overall Quality")).toBeTruthy()
+  await act(async () => {
+    result.setAttribute("data-option", "2 of 2")
+  })
+  expect(screen.queryByRole("dialog")).toBeNull()
+  await user.click(screen.getByTitle(/view.*ratings/i))
+  expect(sendMessage).toHaveBeenCalledTimes(2)
+})
+
+it("clears a choice when Schedule Builder changes its result number", async () => {
+  const sendMessage = connectSearch()
+  const user = userEvent.setup()
+  const current = course("Alex Chen", "Hunter College")
+  const table = current.instructor.closest("table")!
+  const result = document.createElement("section")
+  result.id = "page_results"
+  result.innerHTML = `<div class="results-with-schedules"><span class="results-current-schedule">1</span><span class="results-total-schedules">2</span></div>`
+  table.replaceWith(result)
+  result.appendChild(table)
+  render(<RMPButton anchor={current.anchor} />)
+  await user.click(screen.getByTitle(/view.*ratings/i))
+  await user.click(
+    await screen.findByRole("button", {
+      name: "Show ratings for Alex Chen at Baruch College"
+    })
+  )
+  await act(async () => {
+    result.querySelector(".results-current-schedule")!.textContent = "2"
+  })
+  expect(screen.queryByRole("dialog")).toBeNull()
+  await user.click(screen.getByTitle(/view.*ratings/i))
+  expect(sendMessage).toHaveBeenCalledTimes(2)
+})
