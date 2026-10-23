@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event"
 import { afterEach, expect, it, vi } from "vitest"
 
 import RMPButton from "../src/features/ratings/components/RMPButton"
+import { cunyfirstHomeStyles } from "../src/features/theme/cunyfirst-home"
 import { startHostTheme } from "../src/features/theme/host-page"
 import IndexPopup from "../src/popup"
 import { connectLoginStorage, credentials } from "./login-fixture"
@@ -263,4 +264,68 @@ it("darkens the visible Schedule Builder result cards", async () => {
     expect(getComputedStyle(document.querySelector(selector)!).backgroundColor).toBe(
       "rgb(44, 52, 66)"
     )
+})
+
+it("themes CUNYfirst home tiles and restores the site's current theme", async () => {
+  const storage = connectLoginStorage()
+  portalStyle = document.createElement("style")
+  portalStyle.textContent = `
+    body, #PT_LANDINGPAGE { background-color: white; color: black; }
+    #PT_WRAPPER { background: rgb(245, 249, 249) url(texture.svg); }
+    #PT_HEADER { background-color: rgb(0, 57, 113); color: white; }
+    .lpnavigation { background-color: rgb(232, 241, 240); }
+    .nuilp { background-color: white; color: black; }
+    .nuilp .ps-label, .nuilp .ps_box-value, .nuilp .cuCalendarDescription { color: black; }
+    .nuilp[style] { color: rgb(100, 35, 20); }
+    input { background-color: white; color: black; }
+  `
+  document.head.appendChild(portalStyle)
+  document.body.innerHTML = `
+    <form id="PT_LANDINGPAGE">
+      <div id="PT_WRAPPER"><header id="PT_HEADER"><img alt="CUNY" src="cuny-logo.png">CUNYfirst Home</header>
+        <nav class="lpnavigation"><span class="ps-label">CUNYfirst Home</span></nav>
+        <main class="lptabpnl"><div class="lptab-cont">
+          <div class="nuilp"><span class="ps-label">Student Center</span><span class="ps_box-value">Open records</span><span class="cuCalendarDescription">No Classes</span></div>
+          <div class="nuilp" style="background-color: rgb(250, 220, 180)">CUNY Alert</div>
+        </div></main>
+        <label for="search">Search</label><input id="search">
+      </div>
+    </form>
+  `
+  const tile = document.querySelector<HTMLElement>(".nuilp")!
+  const header = document.querySelector<HTMLElement>("#PT_HEADER")!
+  stopHost = startHostTheme(cunyfirstHomeStyles)
+  expect(getComputedStyle(tile).backgroundColor).toBe("rgb(255, 255, 255)")
+
+  await act(async () => storage.change({ darkMode: true }))
+  expect(getComputedStyle(document.querySelector("#PT_WRAPPER")!).backgroundColor).toBe("rgb(32, 36, 44)")
+  expect(getComputedStyle(document.querySelector("#PT_WRAPPER")!).backgroundImage).toBe("none")
+  expect(getComputedStyle(tile).backgroundColor).toBe("rgb(44, 52, 66)")
+  expect(getComputedStyle(tile).color).toBe("rgb(241, 245, 249)")
+  for (const selector of [".nuilp .ps-label", ".nuilp .ps_box-value", ".nuilp .cuCalendarDescription"])
+    expect(getComputedStyle(document.querySelector(selector)!).color).toBe("rgb(241, 245, 249)")
+  expect(getComputedStyle(document.querySelector(".lpnavigation")!).backgroundColor).toBe("rgb(44, 52, 66)")
+  expect(getComputedStyle(document.querySelector("input")!).backgroundColor).toBe("rgb(32, 36, 44)")
+  expect(getComputedStyle(header).backgroundColor).toBe("rgb(0, 57, 113)")
+  expect(header.querySelector("img")!.getAttribute("src")).toBe("cuny-logo.png")
+  const alertTile = document.querySelector<HTMLElement>(".nuilp[style]")!
+  expect(getComputedStyle(alertTile).backgroundColor).toBe("rgb(250, 220, 180)")
+  expect(getComputedStyle(alertTile).color).toBe("rgb(100, 35, 20)")
+
+  portalStyle.textContent += `.nuilp { background-color: rgb(245, 240, 230); }`
+  await act(async () => storage.change({ darkMode: false }))
+  expect(getComputedStyle(tile).backgroundColor).toBe("rgb(245, 240, 230)")
+  expect(getComputedStyle(document.querySelector(".nuilp .ps-label")!).color).toBe("rgb(0, 0, 0)")
+})
+
+it("uses the saved dark setting for newly opened CUNYfirst home content", async () => {
+  connectLoginStorage({ darkMode: true })
+  stopHost = startHostTheme(cunyfirstHomeStyles)
+  await waitFor(() =>
+    expect(document.documentElement.hasAttribute("data-cuny-plus-dark")).toBe(
+      true
+    )
+  )
+  document.body.innerHTML = `<form id="PT_LANDINGPAGE"><div id="PT_WRAPPER"><div class="nuilp">Student Center</div></div></form>`
+  expect(getComputedStyle(document.querySelector(".nuilp")!).backgroundColor).toBe("rgb(44, 52, 66)")
 })

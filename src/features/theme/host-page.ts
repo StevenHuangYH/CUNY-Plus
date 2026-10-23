@@ -69,9 +69,9 @@ ${host(`:is(${pastelSurfaces}) :is(.faculty, .campus, .semibold, .campus_block, 
 }
 `
 
-export function startHostTheme() {
+export function startHostTheme(siteStyles = styles) {
   const style = document.createElement("style")
-  style.textContent = styles
+  style.textContent = siteStyles
   document.documentElement.appendChild(style)
   const apply = () => {
     document.documentElement.toggleAttribute(
