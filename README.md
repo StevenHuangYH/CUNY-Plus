@@ -17,7 +17,7 @@ Instead of copying and pasting professor names into a new tab, CUNY Plus does th
 - **Professor Identity Matching:** Scores appear automatically only for a unique full-name and campus match. When the campus is missing, a name is abbreviated, or several profiles could match, choose a professor from a list showing their actual name, school, and profile link. Cross-campus and non-CUNY candidates always require your choice. Choices last only while that course context remains on the current page.
 - **One-Click Auto Login:** Tired of typing your long `firstname.last##@login.cuny.edu` every time you log into CUNY SSO? Save it securely in the extension popup, and we'll auto-fill and submit it for you.
 - **Quick access:** Open Brightspace, CUNYfirst (for Student Center), or DegreeWorks in a new tab from the extension popup. These links are available even when Auto Login is off.
-- **Dark mode:** The popup switch themes CUNY Login, CUNYfirst home and Student Center, CUNYfirst function pages, and Schedule Builder. It remembers your choice in this browser and restores each site's appearance when switched off.
+- **Dark mode:** The popup switch themes CUNY Login, CUNYfirst home and Student Center, CUNYfirst function pages, Schedule Builder, and Brightspace platform pages. It remembers your choice in this browser and restores each site's appearance when switched off.
 
 ## How it works
 
