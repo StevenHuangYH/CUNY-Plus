@@ -11,6 +11,43 @@ afterEach(() => {
   vi.unstubAllGlobals()
 })
 
+it("keeps quick access available when settings fail to load", async () => {
+  const storage = connectLoginStorage({ autoLogin: false })
+  storage.failRead()
+  render(<IndexPopup />)
+
+  expect(await screen.findByRole("alert")).toBeTruthy()
+  const quickAccess = screen.getByRole("navigation", { name: "Quick access" })
+  const destinations = [
+    ["Brightspace", "https://brightspace.cuny.edu/"],
+    ["Student Center", "https://home.cunyfirst.cuny.edu/"],
+    ["DegreeWorks", "https://degreeworks.cuny.edu/"]
+  ]
+
+  for (const [name, href] of destinations) {
+    const link = screen.getByRole("link", { name: new RegExp(name) })
+    expect(quickAccess.contains(link)).toBe(true)
+    expect(link.getAttribute("href")).toBe(href)
+    expect(link.getAttribute("target")).toBe("_blank")
+    expect(link.getAttribute("rel")).toBe("noopener noreferrer")
+  }
+  expect(screen.getAllByRole("link")).toHaveLength(3)
+  expect(storage.set).not.toHaveBeenCalled()
+})
+
+it("keeps quick access available when Auto Login is off", async () => {
+  connectLoginStorage({ autoLogin: false })
+  render(<IndexPopup />)
+
+  await waitFor(() =>
+    expect(screen.getByRole("switch").getAttribute("aria-checked")).toBe(
+      "false"
+    )
+  )
+  expect(screen.getAllByRole("link")).toHaveLength(3)
+  expect(screen.queryByRole("alert")).toBeNull()
+})
+
 it("retains credentials and reports a failed save instead of showing Saved", async () => {
   const storage = connectLoginStorage()
   storage.failWrite()

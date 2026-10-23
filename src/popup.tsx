@@ -13,6 +13,24 @@ const NAVY = "#1B3A6B"
 const NAVY_DARK = "#142D55"
 const WHITE = "#FFFFFF"
 
+const QUICK_LINKS = [
+  {
+    label: "Brightspace",
+    description: "Courses",
+    href: "https://brightspace.cuny.edu/"
+  },
+  {
+    label: "Student Center",
+    description: "Via CUNYfirst home",
+    href: "https://home.cunyfirst.cuny.edu/"
+  },
+  {
+    label: "DegreeWorks",
+    description: "Degree audit",
+    href: "https://degreeworks.cuny.edu/"
+  }
+] as const
+
 function IndexPopup() {
   const [autoLogin, setAutoLogin] = useState(false)
   const [username, setUsername] = useState("")
@@ -154,6 +172,56 @@ function IndexPopup() {
           gap: 16
         }}>
         <DarkModeButton />
+        <nav aria-label="Quick access">
+          <p
+            style={{
+              margin: "0 0 8px",
+              fontSize: 12,
+              fontWeight: 700,
+              color: colors.text
+            }}>
+            Quick access
+          </p>
+          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            {QUICK_LINKS.map(({ label, description, href }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "9px 10px",
+                  border: `1px solid ${colors.border}`,
+                  borderRadius: 8,
+                  background: colors.subtle,
+                  color: colors.text,
+                  textDecoration: "none"
+                }}>
+                <span style={{ display: "flex", flexDirection: "column" }}>
+                  <span style={{ fontSize: 12, fontWeight: 600 }}>{label}</span>
+                  <span style={{ fontSize: 10, color: colors.muted }}>
+                    {description}
+                  </span>
+                </span>
+                <svg
+                  aria-hidden="true"
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round">
+                  <path d="M7 17 17 7M8 7h9v9" />
+                </svg>
+              </a>
+            ))}
+          </div>
+        </nav>
         {/* Auto Login row */}
         <div
           style={{
