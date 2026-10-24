@@ -15,13 +15,14 @@ Issue: [#11](https://github.com/StevenHuangYH/CUNY-Plus/issues/11). Verified on 
 - On the updated Brightspace college home, the account name, calendar dates, and Work To Do due date computed to light text colors. The course cards used dark surfaces, and course imagery and branded navigation remained present. A fresh Brightspace college home page used the saved dark setting after load.
 - A signed-in Schedule Builder result exposed white timetable rows and gray day cells behind inherited light text. A focused test reproduced the contrast problem. After reloading the updated extension and result page, the timetable rows computed to `rgb(44, 52, 66)` and day headers to `rgb(57, 73, 96)`, both with `rgb(241, 245, 249)` text. The schedule result remained present. The regression test also confirms colored course blocks keep their colors.
 - The saved dark choice survived reloading the extension itself: the Schedule Builder result loaded dark again after the extension and page reloads.
+- After Chrome reconnected with a new browser session and restored tabs, a fresh Brightspace college home page read the saved dark choice and used the dark body surface. This is the live browser-restart persistence check.
 - Brightspace assignments and quizzes opened in the signed-in course with the dark marker active. Both used the dark body surface and light headings; the assignments page links used either light text or the extension's blue link color.
 - After switching Dark mode off, fresh Brightspace college home, CUNYfirst Student Center, and Schedule Builder criteria pages loaded without the dark marker. Their body backgrounds returned to the sites' light colors (`rgb(246, 247, 248)` for Brightspace and white for the two CUNYfirst pages). The previously open QA tabs were no longer available for a same-tab restoration check; the earlier popup-toggle check above covered same-tab restoration.
 
-## Checks still required on the updated extension
+## Verification limits
 
 - No theme or appearance control was exposed in the inspected Brightspace Account Settings and CUNYfirst My Preferences pages, so the dynamic site-theme change is covered by automated tests rather than a live setting change.
-- Check a browser restart for the saved setting when the open Chrome session can be safely restarted. Automated tests cover persistence across popup remounts and newly opened content. The implementation uses `chrome.storage.local`, which [Chrome documents as persistent local extension storage](https://developer.chrome.com/docs/extensions/reference/api/storage). The existing installed profile cannot represent a first install, which is verified in tests.
-- Inspect page load for a noticeable light flash. Content scripts start at `document_start`, but the saved setting is read asynchronously, so a brief flash may remain on some pages.
+- The existing installed profile cannot represent a first install, which is verified in tests. The implementation uses `chrome.storage.local`, which [Chrome documents as persistent local extension storage](https://developer.chrome.com/docs/extensions/reference/api/storage).
+- Fresh pages were dark at the first settled observation, but that does not rule out a brief light flash during navigation. Content scripts start at `document_start`, while the saved setting is read asynchronously, so a brief flash may remain on some pages.
 
 The extension does not theme Brightspace course files or third-party embedded tools. Their presentation belongs to the source content.
