@@ -19,8 +19,8 @@ Issue: [#11](https://github.com/StevenHuangYH/CUNY-Plus/issues/11). Verified on 
 
 ## Checks still required on the updated extension
 
-- Change any available site theme while extension dark mode is on and confirm the site's latest appearance returns when it is turned off. Automated tests cover this behavior.
-- Check a browser restart for the saved setting. Automated tests cover persistence across popup remounts and newly opened content; the existing installed profile cannot represent a first install, which is verified in tests.
+- No theme or appearance control was exposed in the inspected Brightspace Account Settings and CUNYfirst My Preferences pages, so the dynamic site-theme change is covered by automated tests rather than a live setting change.
+- Check a browser restart for the saved setting when the open Chrome session can be safely restarted. Automated tests cover persistence across popup remounts and newly opened content. The implementation uses `chrome.storage.local`, which [Chrome documents as persistent local extension storage](https://developer.chrome.com/docs/extensions/reference/api/storage). The existing installed profile cannot represent a first install, which is verified in tests.
 - Inspect page load for a noticeable light flash. Content scripts start at `document_start`, but the saved setting is read asynchronously, so a brief flash may remain on some pages.
 
 The extension does not theme Brightspace course files or third-party embedded tools. Their presentation belongs to the source content.
