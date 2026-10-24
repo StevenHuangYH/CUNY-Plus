@@ -45,9 +45,11 @@ ${host(".login-note, .login-links .accordion-toggle")} { color: #dbe4f0 !importa
    inherited light text. Course blocks inside the cells retain their colors. */
 ${host(".timetable .weekArea tr.even, .timetable .weekArea tr.odd")} {
   background-color: #2c3442 !important;
+  color: #f1f5f9 !important;
 }
 ${host(".timetable .weekArea tr:first-child td")} {
   background-color: #394960 !important;
+  color: #f1f5f9 !important;
 }
 
 ${host(`input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]),

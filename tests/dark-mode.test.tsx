@@ -321,13 +321,17 @@ it("keeps Schedule Builder timetable labels readable without recoloring course b
 
   await act(async () => storage.change({ darkMode: true }))
   expect(getComputedStyle(row).backgroundColor).toBe("rgb(44, 52, 66)")
+  expect(getComputedStyle(row).color).toBe("rgb(241, 245, 249)")
   expect(getComputedStyle(day).backgroundColor).toBe("rgb(57, 73, 96)")
+  expect(getComputedStyle(day).color).toBe("rgb(241, 245, 249)")
   expect(getComputedStyle(course).backgroundColor).toBe("rgb(165, 214, 167)")
   expect(getComputedStyle(course).color).toBe("rgb(26, 26, 46)")
 
   await act(async () => storage.change({ darkMode: false }))
   expect(getComputedStyle(row).backgroundColor).toBe("rgb(255, 255, 255)")
+  expect(getComputedStyle(row).color).toBe("rgb(0, 0, 0)")
   expect(getComputedStyle(day).backgroundColor).toBe("rgb(224, 224, 224)")
+  expect(getComputedStyle(day).color).toBe("rgb(0, 0, 0)")
 })
 
 it("themes CUNYfirst home tiles and restores the site's current theme", async () => {
