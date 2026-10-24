@@ -41,17 +41,19 @@ function lines(element: Element): string[] {
 
 function instructorsIn(entry: Element, selector: string) {
   const elements = Array.from(entry.querySelectorAll(selector)).filter(visible)
-  const names = elements.length ? elements.flatMap(lines) : ["Not provided"]
-  if (!names.length) names.push("Not provided")
+  const rawNames = elements.flatMap(lines)
+  const names = rawNames.length ? rawNames : ["Not provided"]
   const combinedName =
-    (elements.length === 1 && names.length > 1) ||
-    (names.length === 1 && /[,;；\n]|\s(?:and|&)\s/i.test(names[0]))
+    rawNames.length !== elements.length ||
+    rawNames.some((name) => /[,;；\n]|\s(?:and|&)\s/i.test(name))
   return {
     names,
     ratings:
-      !elements.length || combinedName
+      !rawNames.length || combinedName
         ? ["Identity unclear"]
-        : names.map((name, index) => recordedRatingLabel(elements[index], name))
+        : rawNames.map((name, index) =>
+            recordedRatingLabel(elements[index], name)
+          )
   }
 }
 

@@ -1,117 +1,25 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react"
 
 import {
-  forgetRatingSnapshot,
-  ratingContextKey,
-  recordRatingSnapshot
-} from "../schedule-copy/ratings"
-import { cleanProfessorName, isPlaceholder } from "./identity"
+  courseInstructorRating,
+  type CourseInstructorRatingState
+} from "./course-instructor"
 import type {
   ProfessorCandidate,
   ProfessorLookupResult,
   ProfessorQuery
 } from "./types"
 
-function readCourse(element?: Element): ProfessorQuery {
-  const scope = element?.closest("td, [data-course]")
-  const campuses = scope?.querySelectorAll(".campus_block")
-  const campus =
-    campuses?.length === 1
-      ? campuses[0].textContent?.replace(/\s+/g, " ").trim()
-      : undefined
-  return {
-    professorName: cleanProfessorName(element?.textContent ?? ""),
-    campus: campus || undefined
-  }
-}
-
-function courseKey(element?: Element): string {
-  return JSON.stringify({
-    course: readCourse(element),
-    context: element ? ratingContextKey(element) : null
-  })
-}
-
-/** Keeps a lookup and a student's choice tied to the live course context. */
-export function useProfessorLookup(element?: Element) {
-  const [course, setCourse] = useState(() => readCourse(element))
-  const [result, setResult] = useState<ProfessorLookupResult | null>(null)
-  const [selected, setSelected] = useState<ProfessorCandidate | null>(null)
-  const [loading, setLoading] = useState(false)
-  const [open, setOpen] = useState(false)
-  const requestId = useRef(0)
-
-  useEffect(() => {
-    let key = courseKey(element)
-    const reset = () => {
-      requestId.current++
-      setCourse(readCourse(element))
-      setResult(null)
-      setSelected(null)
-      setLoading(false)
-      setOpen(false)
-    }
-    reset()
-    const observer = new MutationObserver(() => {
-      const next = courseKey(element)
-      if (next !== key) {
-        key = next
-        reset()
-      }
-    })
-    const scope =
-      element?.closest("tr, [data-course]") ?? element?.parentElement
-    if (scope)
-      observer.observe(scope, {
-        childList: true,
-        characterData: true,
-        subtree: true,
-        attributes: true,
-        attributeFilter: ["class", "data-option"]
-      })
-    const option = element?.closest("[data-schedule-results]")
-    if (option && option !== scope)
-      observer.observe(option, {
-        attributes: true,
-        attributeFilter: ["data-option"]
-      })
-    const liveNavigation = element
-      ?.closest("#page_results")
-      ?.querySelector(".results-with-schedules")
-    if (liveNavigation)
-      observer.observe(liveNavigation, {
-        childList: true,
-        characterData: true,
-        subtree: true
-      })
-    return () => {
-      requestId.current++
-      observer.disconnect()
-    }
-  }, [element])
-
-  const search = () => {
-    const input = readCourse(element)
-    if (isPlaceholder(input.professorName)) return
-    const key = courseKey(element)
-    const currentId = ++requestId.current
-    setCourse(input)
-    setLoading(true)
-    setResult(null)
-    setSelected(null)
-    setOpen(true)
-
-    const finish = (response: ProfessorLookupResult) => {
-      if (currentId !== requestId.current || key !== courseKey(element)) return
-      setResult(response)
-      setLoading(false)
-    }
+function requestProfessorRating(
+  course: ProfessorQuery
+): Promise<ProfessorLookupResult> {
+  return new Promise((resolve) => {
     try {
       chrome.runtime.sendMessage(
-        { type: "FETCH_PROFESSOR_RATING", payload: input },
+        { type: "FETCH_PROFESSOR_RATING", payload: course },
         (response: ProfessorLookupResult | undefined) => {
           const error = chrome.runtime.lastError
-          finish(
+          resolve(
             error || !response
               ? {
                   status: "error",
@@ -123,39 +31,55 @@ export function useProfessorLookup(element?: Element) {
         }
       )
     } catch {
-      finish({
+      resolve({
         status: "error",
         error: "Could not reach the extension. Please reload this page."
       })
     }
-  }
+  })
+}
 
-  const rating =
-    selected ?? (result?.status === "matched" ? result.professor : null)
-  useEffect(() => {
-    if (element)
-      recordRatingSnapshot(element, {
-        displayedName: course.professorName,
-        result,
-        rating,
-        loading
-      })
-  }, [element, course.professorName, result, rating, loading])
+const empty: CourseInstructorRatingState = {
+  course: { professorName: "" },
+  result: null,
+  rating: null,
+  loading: false,
+  contextRevision: 0
+}
+const subscribeNone = () => () => {}
+const getEmpty = () => empty
 
-  useEffect(
-    () => () => {
-      if (element) forgetRatingSnapshot(element)
-    },
+/** Binds a course instructor rating to React without owning its state. */
+export function useProfessorLookup(element?: Element) {
+  const session = useMemo(
+    () => (element ? courseInstructorRating(element) : null),
     [element]
   )
+  const state = useSyncExternalStore(
+    session?.subscribe ?? subscribeNone,
+    session?.getSnapshot ?? getEmpty
+  )
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => setOpen(false), [session, state.contextRevision])
+
+  const search = () => {
+    if (!session) return
+    session.search(requestProfessorRating)
+    setOpen(true)
+  }
+
+  const select = (candidate: ProfessorCandidate | null) =>
+    session?.select(candidate)
+
   return {
-    course,
-    result,
-    rating,
-    loading,
+    course: state.course,
+    result: state.result,
+    rating: state.rating,
+    loading: state.loading,
     open,
     setOpen,
     search,
-    select: setSelected
+    select
   }
 }

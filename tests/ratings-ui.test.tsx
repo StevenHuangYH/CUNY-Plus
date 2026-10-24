@@ -171,7 +171,7 @@ it("attributes a manually selected non-CUNY profile to its own name and school",
   expect(within(card).queryByText("Alex Chen")).toBeNull()
 })
 
-it("requires a new choice after the page is recreated", async () => {
+it("retains a choice when the rating button is recreated on the same instructor", async () => {
   connectSearch()
   const user = userEvent.setup()
   const current = course()
@@ -185,12 +185,12 @@ it("requires a new choice after the page is recreated", async () => {
   firstPage.unmount()
   render(<RMPButton anchor={current.anchor} />)
   await user.click(screen.getByTitle(/view.*ratings/i))
+  expect(screen.getByText("Overall Quality")).toBeTruthy()
   expect(
-    await screen.findByRole("button", {
+    screen.queryByRole("button", {
       name: "Show ratings for Alex Chen at Baruch College"
     })
-  ).toBeTruthy()
-  expect(screen.queryByText("Overall Quality")).toBeNull()
+  ).toBeNull()
 })
 
 it("keeps a closed loading card closed when the response arrives", async () => {

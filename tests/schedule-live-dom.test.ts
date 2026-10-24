@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
-import { afterEach, expect, it } from "vitest"
+import { afterEach, expect, it, vi } from "vitest"
 
+import { courseInstructorRating } from "../src/features/ratings/course-instructor"
 import { readDisplayedSchedule } from "../src/features/schedule-copy/read-schedule"
 
 afterEach(() => {
@@ -64,4 +65,30 @@ it("preserves separately displayed instructor names when one field contains line
     "Blair Two"
   ])
   expect(result.schedule.entries[0].ratings).toEqual(["Identity unclear"])
+})
+
+it("drops a rating when the live schedule entry name changes", async () => {
+  document.body.innerHTML = `<div id="page_results"><div class="results-with-schedules"><span class="results-current-schedule">1</span></div><div id="flip_area"><div id="legend_box"><div class="course_box"><div class="legend_table computer-only"><div class="course_header"><div class="header_cell"><h4 class="course_title">BIO 1000</h4><div><span class="mobileNUmber">1-</span><span class="course-name">Biology</span></div></div></div><div class="selection_row"><div title="Instructor(s)">Alex Chen</div></div></div></div></div></div></div>`
+  const instructor = document.querySelector('[title="Instructor(s)"]')!
+  courseInstructorRating(instructor).search(async () => ({
+    status: "matched",
+    professor: {
+      id: "professor-1",
+      legacyId: "1",
+      name: "Alex Chen",
+      schoolName: "Baruch College",
+      profileUrl: "https://www.ratemyprofessors.com/professor/1",
+      avgRating: 4.2,
+      tags: []
+    }
+  }))
+  await vi.waitFor(() =>
+    expect(readDisplayedSchedule(document)).toMatchObject({
+      schedule: { entries: [{ ratings: ["4.2"] }] }
+    })
+  )
+  document.querySelector(".course-name")!.textContent = "Ecology"
+  expect(readDisplayedSchedule(document)).toMatchObject({
+    schedule: { entries: [{ ratings: ["Not searched"] }] }
+  })
 })

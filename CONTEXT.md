@@ -4,6 +4,34 @@ CUNY Plus helps students identify the RateMyProfessors profile associated with a
 
 ## Language
 
+**Brightspace**:
+CUNY's learning management system for course materials and activities.
+_Avoid_: Blackboard
+
+**Student Center**:
+The student self-service area within CUNYfirst for enrollment, records, and finances. It is distinct from the CUNYfirst home page.
+_Avoid_: CUNYfirst home
+
+**CUNYfirst pages**:
+The CUNY Login, CUNYfirst home, Student Center, Schedule Builder, and other first-party pages in the CUNYfirst workflow.
+_Avoid_: All CUNY websites
+
+**DegreeWorks**:
+CUNY's degree audit system for reviewing academic requirements and progress toward graduation.
+_Avoid_: Degree Work
+
+**Selected-course list**:
+The courses and class-selection criteria chosen on the left side of CUNY Schedule Builder as inputs for generating schedule options. It is distinct from the displayed schedule.
+_Avoid_: Available classes, displayed schedule, registered schedule
+
+**Displayed schedule**:
+The one generated schedule option currently shown in CUNY Schedule Builder for the selected term. It is a planning result, not evidence of enrollment.
+_Avoid_: Registered schedule (before enrollment)
+
+**Schedule entry**:
+One independent class entry in a displayed schedule. It may contain multiple meeting times, such as a lecture and a lab; entries with the same course code remain distinct.
+_Avoid_: Course (when distinguishing class entries), meeting time
+
 **Course instructor**:
 The person named as an instructor on a course listing. The listing's name is evidence of identity, not proof that a particular RateMyProfessors profile belongs to that person.
 _Avoid_: Matched professor (before identification)

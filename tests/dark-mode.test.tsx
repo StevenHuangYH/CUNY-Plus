@@ -334,6 +334,122 @@ it("keeps Schedule Builder timetable labels readable without recoloring course b
   expect(getComputedStyle(day).color).toBe("rgb(0, 0, 0)")
 })
 
+it("themes Schedule Builder selected-course list, course-block headings, Advanced Search, and Filters dialog", async () => {
+  const storage = connectLoginStorage()
+  portalStyle = document.createElement("style")
+  portalStyle.textContent = `
+    body { background-color: #ffffff; color: #000000; }
+    .cbox, .rbox-has-reqid { background-color: #ffffff; }
+    .cbox-cn { border-top: 7px solid #ffffff; border-bottom: 7px solid #ffffff; }
+    .cbox-option { color: #555555; }
+    .cbox-warnings { color: #a00a0a; }
+    .cbox-hover-pin { background-color: #ffffff; }
+    .msItemN { background-color: #f5f5f5; border: 1px solid #d9d9d9; }
+    .msItemT { color: #222222; }
+    .bc1 { background-color: rgb(165, 214, 167); }
+    .advSearchButton { background-color: #ffffff; color: #757575; }
+    .advSearchText { color: #000000; }
+    .popup-wrapper { background-color: #ffffff; }
+    .popup-title h3 { color: #333333; }
+    .popup-subtitle { color: #777777; }
+    .popup-body { color: #555555; }
+  `
+  document.head.appendChild(portalStyle)
+  document.body.innerHTML = `
+    <div id="page_criteria">
+      <div class="msItemN"><span class="msItemT">Main Campus</span></div>
+      <div class="sdl_input plusInput">
+        <label for="code_number">Select Course</label>
+        <input id="code_number" type="text">
+        <button class="advSearchButton" type="button">
+          <div class="advSearchText">Advanced<br>Search</div>
+          <i class="advSearchIcon"></i>
+        </button>
+      </div>
+      <div id="requirements">
+        <div class="requirementDiv2 rbox rbox-has-reqid">
+          <div class="cbox">
+            <table class="cbox-expand-region"><tbody><tr>
+              <td class="cbox-codenumber"><div class="cbox-cn bc1">CSC<br>126</div></td>
+              <td class="cbox-header"><span class="cbox-title">Intro to CS</span></td>
+              <td class="cbox-option"><button class="mdl-button mdl-button--icon" type="button">Lock</button></td>
+            </tr></tbody></table>
+            <div class="cbox-warnings">All classes full</div>
+            <div class="cbox-expansion">
+              <span class="cbox-selitem cbox-classitem">
+                <label class="cbox-checkbox"><input type="checkbox"><span class="cbox-selitem-label">Lec 01</span></label>
+                <div class="cbox-hover-pin">Pin</div>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="page_results">
+      <div class="course_box"><div class="course_header bc1">
+        <h4 class="course_title">CSC 126</h4>
+        <label>Intro to CS</label>
+      </div></div>
+    </div>
+    <div id="noticePopup" class="popup-wrapper">
+      <div class="popup-title"><h3>Advanced Course Search</h3></div>
+      <div class="popup-body">
+        <div class="course-browsing">
+          <div class="course-browsing-search">
+            <div class="cb_filter_text">Selected campuses only</div>
+            <table><tbody><tr><th>Academic Career:</th><td><select><option>Undergraduate</option></select></td></tr></tbody></table>
+          </div>
+          <div class="course-browsing-results">
+            <span class="cb_switch_text">View selected only</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="popupfilter" class="popup-wrapper">
+      <div class="popup-title">Filters</div>
+      <div class="popup-body">
+        <div class="popup-subtitle">Show me schedules containing:</div>
+        <div class="rowfilter"><div class="filteroption"><label>Full classes</label></div></div>
+      </div>
+    </div>
+  `
+  stopHost = startHostTheme()
+
+  await act(async () => storage.change({ darkMode: true }))
+  const styleOf = (selector: string) =>
+    getComputedStyle(document.querySelector<HTMLElement>(selector)!)
+
+  expect(styleOf(".cbox").backgroundColor).toBe("rgb(44, 52, 66)")
+  expect(styleOf(".cbox").color).toBe("rgb(241, 245, 249)")
+  expect(styleOf(".rbox-has-reqid").backgroundColor).toBe("rgb(44, 52, 66)")
+  expect(styleOf(".cbox-cn.bc1").backgroundColor).toBe("rgb(165, 214, 167)")
+  expect(styleOf(".cbox-cn.bc1").color).toBe("rgb(26, 26, 46)")
+  expect(styleOf(".cbox-cn.bc1").borderTopColor).toBe("rgb(44, 52, 66)")
+  expect(styleOf(".cbox-option").color).toBe("rgb(219, 228, 240)")
+  expect(styleOf(".cbox-warnings").color).toBe("rgb(255, 163, 173)")
+  expect(styleOf(".cbox-hover-pin").backgroundColor).toBe("rgb(57, 73, 96)")
+  expect(styleOf(".msItemN").backgroundColor).toBe("rgb(44, 52, 66)")
+  expect(styleOf(".msItemT").color).toBe("rgb(219, 228, 240)")
+
+  expect(styleOf(".course_header.bc1").backgroundColor).toBe("rgb(165, 214, 167)")
+  expect(styleOf(".course_header.bc1 .course_title").color).toBe("rgb(26, 26, 46)")
+  expect(styleOf(".course_header.bc1 label").color).toBe("rgb(26, 26, 46)")
+
+  expect(styleOf(".advSearchButton").backgroundColor).toBe("rgb(44, 52, 66)")
+  expect(styleOf(".advSearchText").color).toBe("rgb(241, 245, 249)")
+
+  expect(styleOf("#noticePopup .popup-title h3").color).toBe("rgb(219, 228, 240)")
+  expect(styleOf("#noticePopup .popup-body").color).toBe("rgb(241, 245, 249)")
+  expect(styleOf(".course-browsing-search th").color).toBe("rgb(219, 228, 240)")
+  expect(styleOf(".cb_filter_text").color).toBe("rgb(219, 228, 240)")
+  expect(styleOf(".cb_switch_text").color).toBe("rgb(219, 228, 240)")
+  expect(styleOf("#popupfilter .popup-subtitle").color).toBe("rgb(219, 228, 240)")
+
+  await act(async () => storage.change({ darkMode: false }))
+  expect(styleOf(".cbox").backgroundColor).toBe("rgb(255, 255, 255)")
+  expect(styleOf("#popupfilter .popup-subtitle").color).toBe("rgb(119, 119, 119)")
+})
+
 it("themes CUNYfirst home tiles and restores the site's current theme", async () => {
   const storage = connectLoginStorage()
   portalStyle = document.createElement("style")

@@ -2,9 +2,10 @@
 
 Issue: [#11](https://github.com/StevenHuangYH/CUNY-Plus/issues/11). Verified on 2026-10-24 in Chrome with the locally installed CUNY Plus extension.
 
-## Regression found after the initial verification
+## Regression found and repaired after the initial verification
 
-- A later live visit to the 2027 Spring Schedule Builder working screen exposed a white selected-course row behind light text, a light course label on a green course block, and black Advanced Search text on a dark button. Approximate contrast ratios were 1.1:1, 1.3:1, and 1.7:1 respectively. The Advanced Search panel retained dark gray field labels on dark surfaces at about 1.7:1; the Filters dialog also retained a dim subtitle. Issue #11 was reopened; the earlier timetable-only check did not cover these surfaces.
+- A later live visit to the 2027 Spring Schedule Builder working screen exposed a white selected-course row behind light text, a light course label on a green course block, and black Advanced Search text on a dark button. Approximate contrast ratios were 1.1:1, 1.3:1, and 1.7:1 respectively. The Advanced Search panel retained dark gray field labels on dark surfaces at about 1.7:1; the Filters dialog also retained a dim subtitle.
+- Root-cause inspection of Schedule Builder's `css/cbox.css` and `css/weekslider.css` identified missing neutral surfaces (`.cbox`, `.rbox-has-reqid`, `.msItemN`, `.mdl-chip`, `.sod_select`, `.course-browsing-results-listing`, etc.), missing light-text overrides on `.popup-body`, `.popup-subtitle`, `.advSearchText`, and `.course-browsing th`, and an ID-level specificity collision inside `:is(..., #popup p, #popup h2, ...)` that overrode dark text on preserved course color blocks (`.bc0`–`.bc12`, `.bl0`–`.bl12`). `src/features/theme/host-page.ts` and `tests/dark-mode.test.tsx` now cover and verify all five Schedule Builder working-screen surfaces.
 
 ## Checks completed
 

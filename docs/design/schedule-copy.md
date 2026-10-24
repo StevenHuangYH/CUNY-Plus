@@ -28,7 +28,7 @@
 ## 实现与验证
 
 - `src/contents/content-schedule-copy.ts` 在 Schedule Builder 中运行；`read-schedule.ts` 从当前可见的 `#flip_area #legend_box` 读取完整方案，每个直接子级 `.course_box` 作为独立条目，并读取课程标题、名称、时间、教师与学期。结果序号从 `.results-with-schedules` 读取。
-- `src/features/ratings/useProfessorLookup.ts` 将现有评分查询及用户选择记录到对应教师元素；复制时只读取快照，不额外查询。方案变化会使快照失效。
+- `src/features/ratings/course-instructor.ts` 将现有评分查询状态及用户选择绑定到对应教师元素；`useProfessorLookup.ts` 只连接 React 界面与查询通信。复制时只读取当前状态，不额外查询。方案变化会使旧评分失效。
 - 本地模拟页和真实页面结构的 DOM 样本都有自动化测试。真实浏览器当时展示一套含两个条目的方案，页面字段与上述选择器吻合；更新后的扩展尚未载入该浏览器，所以仍需一次实际复制操作验证。
 - 评分身份规则见 [`professor-rating-matching.md`](./professor-rating-matching.md) 和根目录 `CONTEXT.md`。
 
