@@ -4,7 +4,7 @@ Issue: [#11](https://github.com/StevenHuangYH/CUNY-Plus/issues/11). Verified on 
 
 ## Regression found after the initial verification
 
-- A later live visit to the 2027 Spring Schedule Builder working screen exposed a white selected-course row behind light text, a light course label on a green course block, and black Advanced Search text on a dark button. Approximate contrast ratios were 1.1:1, 1.3:1, and 1.7:1 respectively. The Filters dialog also retained a dim subtitle. Issue #11 was reopened; the earlier timetable-only check did not cover these surfaces.
+- A later live visit to the 2027 Spring Schedule Builder working screen exposed a white selected-course row behind light text, a light course label on a green course block, and black Advanced Search text on a dark button. Approximate contrast ratios were 1.1:1, 1.3:1, and 1.7:1 respectively. The Advanced Search panel retained dark gray field labels on dark surfaces at about 1.7:1; the Filters dialog also retained a dim subtitle. Issue #11 was reopened; the earlier timetable-only check did not cover these surfaces.
 
 ## Checks completed
 
