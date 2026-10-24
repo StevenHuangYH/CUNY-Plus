@@ -1,6 +1,6 @@
 # CUNY Plus
 
-CUNY Plus helps students identify the RateMyProfessors profile associated with an instructor on a CUNY course listing and provides opt-in automatic submission of saved CUNY Login credentials.
+CUNY Plus helps students identify the RateMyProfessors profile associated with an instructor on a CUNY course listing, copy the currently displayed Schedule Builder option as text or a spreadsheet table, apply dark mode across CUNYfirst pages and Brightspace, open key CUNY portals from the popup, and opt in to automatic submission of saved CUNY Login credentials.
 
 ## Language
 

@@ -2,7 +2,7 @@
   "name": "cuny-plus",
   "displayName": "CUNY Plus",
   "version": "0.2.0",
-  "description": "CUNY Plus & Utilities",
+  "description": "Inline RateMyProfessors ratings, schedule copy, dark mode, and auto-login for CUNY Schedule Builder, CUNYfirst, and Brightspace.",
   "author": "Steven Huang",
   "scripts": {
     "postinstall": "node scripts/patch-parcel-cors.mjs",
