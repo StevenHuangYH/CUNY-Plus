@@ -302,6 +302,34 @@ it("darkens the visible Schedule Builder result cards", async () => {
     ).toBe("rgb(44, 52, 66)")
 })
 
+it("keeps Schedule Builder timetable labels readable without recoloring course blocks", async () => {
+  const storage = connectLoginStorage()
+  portalStyle = document.createElement("style")
+  portalStyle.textContent = `
+    .timetable .weekArea tr.even { background-color: white; color: black; }
+    .timetable .weekArea tr:first-child td { background-color: #e0e0e0; color: black; }
+    .bc1 { background-color: rgb(165, 214, 167); color: #1a1a2e; }
+  `
+  document.head.appendChild(portalStyle)
+  document.body.innerHTML = `<div class="timetable"><div class="weekArea"><table><tbody>
+    <tr><td>Day</td></tr><tr class="even"><td>Time</td><td><div class="bc1">Course</div></td></tr>
+  </tbody></table></div></div>`
+  const row = document.querySelector<HTMLElement>("tr.even")!
+  const day = document.querySelector<HTMLElement>("tr:first-child td")!
+  const course = document.querySelector<HTMLElement>(".bc1")!
+  stopHost = startHostTheme()
+
+  await act(async () => storage.change({ darkMode: true }))
+  expect(getComputedStyle(row).backgroundColor).toBe("rgb(44, 52, 66)")
+  expect(getComputedStyle(day).backgroundColor).toBe("rgb(57, 73, 96)")
+  expect(getComputedStyle(course).backgroundColor).toBe("rgb(165, 214, 167)")
+  expect(getComputedStyle(course).color).toBe("rgb(26, 26, 46)")
+
+  await act(async () => storage.change({ darkMode: false }))
+  expect(getComputedStyle(row).backgroundColor).toBe("rgb(255, 255, 255)")
+  expect(getComputedStyle(day).backgroundColor).toBe("rgb(224, 224, 224)")
+})
+
 it("themes CUNYfirst home tiles and restores the site's current theme", async () => {
   const storage = connectLoginStorage()
   portalStyle = document.createElement("style")

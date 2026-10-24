@@ -10,12 +10,15 @@ Issue: [#11](https://github.com/StevenHuangYH/CUNY-Plus/issues/11). Verified on 
 - Real CUNY Login inspection found a light shell, card, and help panel behind light text. Real Brightspace inspection found dark text in the account menu, calendar dates, and Work To Do due date on dark surfaces. Focused tests now cover the corresponding CSS repairs.
 - After reloading the updated extension, the real CUNY Login shell changed to `rgb(32, 36, 44)` and the card and help panel to `rgb(44, 52, 66)`. Labels, note, links, and password visibility control were legible in the screenshot. Turning Dark mode off restored the site's original shell and card colors. A newly opened CUNY Login page also used the saved dark choice.
 - A Brightspace course-content viewer remained unthemed when the extension switch was on. It had no extension dark marker or injected theme stylesheet; its author-provided content was left alone.
+- After signing in again, Brightspace home and CUNYfirst home loaded successfully, and Schedule Builder's sign-in flow reached its criteria page. All three pages had the extension theme stylesheet present and the dark marker absent while the saved switch was off.
+- Turning Dark mode on marked the already open Brightspace home, CUNYfirst home, and Schedule Builder criteria pages without reloading them. Their body backgrounds became `rgb(32, 36, 44)` with light text. Brightspace widgets and navigation, the CUNYfirst navigation and neutral Student Center tiles, and Schedule Builder buttons also used the intended dark surfaces and readable text.
+- On the updated Brightspace college home, the account name, calendar dates, and Work To Do due date computed to light text colors. The course cards used dark surfaces, and course imagery and branded navigation remained present. A fresh Brightspace college home page used the saved dark setting after load.
+- A signed-in Schedule Builder result exposed white timetable rows and gray day cells behind inherited light text. A focused test reproduced the contrast problem, and the timetable styles now darken those grid surfaces while leaving colored course blocks unchanged. The updated code still needs a live extension reload to confirm this repair.
 
 ## Checks still required on the updated extension
 
-- Inspect the repaired Brightspace pages in Chrome with the updated extension.
-- Sign in again to CUNYfirst and Brightspace. The browser sessions expired during this check, so Student Center, CUNYfirst home, a Schedule Builder result, Brightspace assignments, and quizzes still need real-page inspection.
-- With those pages open together, repeat the popup toggle, then change any available site theme while extension dark mode is on and confirm the site's latest appearance returns when it is turned off.
+- Inspect a Schedule Builder result, Brightspace assignments, and quizzes with the updated extension while dark mode is on.
+- Toggle the open pages back off, then change any available site theme while extension dark mode is on and confirm the site's latest appearance returns when it is turned off.
 - Check a new page and a browser restart for the saved setting. A first-install default was verified in automated tests; the existing installed profile cannot represent a first install.
 - Inspect page load for a noticeable light flash. Content scripts start at `document_start`, but the saved setting is read asynchronously, so a brief flash may remain on some pages.
 

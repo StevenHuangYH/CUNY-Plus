@@ -41,6 +41,14 @@ ${host(".course_cell_option")}::before { color: #dbe4f0 !important; }
 ${host("a, .a")} { color: #a6c8ff !important; }
 ${host(".navigation a, .support-links a, .cuny_header a")} { color: #ffffff !important; }
 ${host(".login-note, .login-links .accordion-toggle")} { color: #dbe4f0 !important; }
+/* Schedule Builder's timetable keeps white rows and gray day headers behind
+   inherited light text. Course blocks inside the cells retain their colors. */
+${host(".timetable .weekArea tr.even, .timetable .weekArea tr.odd")} {
+  background-color: #2c3442 !important;
+}
+${host(".timetable .weekArea tr:first-child td")} {
+  background-color: #394960 !important;
+}
 
 ${host(`input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]),
   select, textarea, option`)} {
