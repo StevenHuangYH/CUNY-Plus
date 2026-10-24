@@ -142,6 +142,37 @@ it("uses the saved choice on assignment and quiz views with readable controls an
   ).toBe("#a6c8ff")
 })
 
+it("keeps Brightspace account and calendar text readable on dark surfaces", async () => {
+  const storage = connectLoginStorage()
+  site = document.createElement("style")
+  site.textContent = `.d2l-navigation-s, .d2l-widget { background: white; }
+    .d2l-navigation-s-personal-menu-text,
+    .d2l-datalist-item-content .d2l-textblock { color: #202122; }`
+  document.head.appendChild(site)
+  document.body.innerHTML = `<nav class="d2l-navigation-s">
+    <span class="d2l-navigation-s-personal-menu-text">Account</span></nav>
+    <div class="d2l-widget"><div class="d2l-datalist-item-content">
+    <span class="d2l-textblock">OCT</span><span class="d2l-textblock">23</span>
+    </div></div>`
+  stop = startHostTheme(brightspaceStyles)
+  await storage.change({ darkMode: true })
+  expect(
+    getComputedStyle(
+      document.querySelector(".d2l-navigation-s-personal-menu-text")!
+    ).color
+  ).toBe("rgb(241, 245, 249)")
+  for (const date of document.querySelectorAll(
+    ".d2l-datalist-item-content .d2l-textblock"
+  ))
+    expect(getComputedStyle(date).color).toBe("rgb(219, 228, 240)")
+  await storage.change({ darkMode: false })
+  expect(
+    getComputedStyle(
+      document.querySelector(".d2l-navigation-s-personal-menu-text")!
+    ).color
+  ).toBe("rgb(32, 33, 34)")
+})
+
 it("updates course cards created inside Brightspace shadow roots and restores them", async () => {
   const storage = connectLoginStorage()
   stop = startBrightspaceTheme()
@@ -175,4 +206,33 @@ it("updates course cards created inside Brightspace shadow roots and restores th
   await storage.change({ darkMode: false })
   expect(first.hasAttribute("data-cuny-plus-dark")).toBe(false)
   expect(second.hasAttribute("data-cuny-plus-dark")).toBe(false)
+})
+
+it("keeps Work To Do due dates readable inside shadow roots", async () => {
+  const storage = connectLoginStorage()
+  stop = startBrightspaceTheme()
+  const widget = document.createElement("d2l-w2d-work-to-do")
+  const widgetRoot = widget.attachShadow({ mode: "open" })
+  const item = document.createElement("d2l-w2d-list-item-quiz")
+  const itemRoot = item.attachShadow({ mode: "open" })
+  itemRoot.innerHTML = `<d2l-w2d-attribute-list class="d2l-w2d-list-item-attributes">
+    <div><span>Due Oct 25</span></div></d2l-w2d-attribute-list>`
+  widgetRoot.appendChild(item)
+  document.body.appendChild(widget)
+  await storage.change({ darkMode: true })
+  await waitFor(() =>
+    expect(item.hasAttribute("data-cuny-plus-dark")).toBe(true)
+  )
+  expect(itemRoot.querySelector("style")?.textContent).toContain(
+    ".d2l-w2d-list-item-attributes"
+  )
+  const laterItem = document.createElement("d2l-w2d-list-item-assignment")
+  laterItem.attachShadow({ mode: "open" })
+  widgetRoot.appendChild(laterItem)
+  await waitFor(() =>
+    expect(laterItem.hasAttribute("data-cuny-plus-dark")).toBe(true)
+  )
+  await storage.change({ darkMode: false })
+  expect(item.hasAttribute("data-cuny-plus-dark")).toBe(false)
+  expect(laterItem.hasAttribute("data-cuny-plus-dark")).toBe(false)
 })

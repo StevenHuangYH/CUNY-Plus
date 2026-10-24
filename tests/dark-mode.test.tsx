@@ -142,6 +142,42 @@ it("updates open host pages and new page content, preserving images and calendar
   )
 })
 
+it("keeps the current CUNY Login card and labels readable, then restores its colors", async () => {
+  const storage = connectLoginStorage()
+  portalStyle = document.createElement("style")
+  portalStyle.textContent = `.auth-shell { background: #f7f4eb; }
+    .login-container { background: white; }
+    .login-links { background: #fafafa; }
+    .login-note { color: rgba(33, 37, 41, .85); }
+    .accordion-toggle { color: #00274c; }
+    .btn-toggle-password { background: white; color: white; }`
+  document.head.appendChild(portalStyle)
+  document.body.innerHTML = `<main><div class="auth-shell"><div class="login-container">
+    <label for="username">CUNY Login</label><input id="username">
+    <button class="btn-toggle-password">Show password</button>
+    <p class="login-note">For your security, log out when done.</p>
+    <nav class="login-links"><button class="accordion-toggle">Support</button><a href="#help">Get Help</a></nav>
+    </div></div></main>`
+  stopHost = startHostTheme()
+  await storage.change({ darkMode: true })
+  const color = (selector: string, property: "color" | "backgroundColor") =>
+    getComputedStyle(document.querySelector(selector)!)[property]
+  expect(color(".auth-shell", "backgroundColor")).toBe("rgb(32, 36, 44)")
+  expect(color(".login-container", "backgroundColor")).toBe("rgb(44, 52, 66)")
+  expect(color(".login-links", "backgroundColor")).toBe("rgb(44, 52, 66)")
+  expect(color(".login-note", "color")).toBe("rgb(219, 228, 240)")
+  expect(color(".accordion-toggle", "color")).toBe("rgb(219, 228, 240)")
+  expect(color(".btn-toggle-password", "backgroundColor")).toBe(
+    "rgb(57, 73, 96)"
+  )
+  await storage.change({ darkMode: false })
+  expect(color(".auth-shell", "backgroundColor")).toBe("rgb(247, 244, 235)")
+  expect(color(".login-container", "backgroundColor")).toBe(
+    "rgb(255, 255, 255)"
+  )
+  expect(color(".login-links", "backgroundColor")).toBe("rgb(250, 250, 250)")
+})
+
 it("keeps dark error, candidate, and rating states readable through retry and selection", async () => {
   connectLoginStorage({ darkMode: true })
   const candidate = {
@@ -261,9 +297,9 @@ it("darkens the visible Schedule Builder result cards", async () => {
   stopHost = startHostTheme()
   await act(async () => storage.change({ darkMode: true }))
   for (const selector of [".reg_legend", ".course_box", ".legend_table"])
-    expect(getComputedStyle(document.querySelector(selector)!).backgroundColor).toBe(
-      "rgb(44, 52, 66)"
-    )
+    expect(
+      getComputedStyle(document.querySelector(selector)!).backgroundColor
+    ).toBe("rgb(44, 52, 66)")
 })
 
 it("themes CUNYfirst home tiles and restores the site's current theme", async () => {
@@ -298,14 +334,28 @@ it("themes CUNYfirst home tiles and restores the site's current theme", async ()
   expect(getComputedStyle(tile).backgroundColor).toBe("rgb(255, 255, 255)")
 
   await act(async () => storage.change({ darkMode: true }))
-  expect(getComputedStyle(document.querySelector("#PT_WRAPPER")!).backgroundColor).toBe("rgb(32, 36, 44)")
-  expect(getComputedStyle(document.querySelector("#PT_WRAPPER")!).backgroundImage).toBe("none")
+  expect(
+    getComputedStyle(document.querySelector("#PT_WRAPPER")!).backgroundColor
+  ).toBe("rgb(32, 36, 44)")
+  expect(
+    getComputedStyle(document.querySelector("#PT_WRAPPER")!).backgroundImage
+  ).toBe("none")
   expect(getComputedStyle(tile).backgroundColor).toBe("rgb(44, 52, 66)")
   expect(getComputedStyle(tile).color).toBe("rgb(241, 245, 249)")
-  for (const selector of [".nuilp .ps-label", ".nuilp .ps_box-value", ".nuilp .cuCalendarDescription"])
-    expect(getComputedStyle(document.querySelector(selector)!).color).toBe("rgb(241, 245, 249)")
-  expect(getComputedStyle(document.querySelector(".lpnavigation")!).backgroundColor).toBe("rgb(44, 52, 66)")
-  expect(getComputedStyle(document.querySelector("input")!).backgroundColor).toBe("rgb(32, 36, 44)")
+  for (const selector of [
+    ".nuilp .ps-label",
+    ".nuilp .ps_box-value",
+    ".nuilp .cuCalendarDescription"
+  ])
+    expect(getComputedStyle(document.querySelector(selector)!).color).toBe(
+      "rgb(241, 245, 249)"
+    )
+  expect(
+    getComputedStyle(document.querySelector(".lpnavigation")!).backgroundColor
+  ).toBe("rgb(44, 52, 66)")
+  expect(
+    getComputedStyle(document.querySelector("input")!).backgroundColor
+  ).toBe("rgb(32, 36, 44)")
   expect(getComputedStyle(header).backgroundColor).toBe("rgb(0, 57, 113)")
   expect(header.querySelector("img")!.getAttribute("src")).toBe("cuny-logo.png")
   const alertTile = document.querySelector<HTMLElement>(".nuilp[style]")!
@@ -315,7 +365,9 @@ it("themes CUNYfirst home tiles and restores the site's current theme", async ()
   portalStyle.textContent += `.nuilp { background-color: rgb(245, 240, 230); }`
   await act(async () => storage.change({ darkMode: false }))
   expect(getComputedStyle(tile).backgroundColor).toBe("rgb(245, 240, 230)")
-  expect(getComputedStyle(document.querySelector(".nuilp .ps-label")!).color).toBe("rgb(0, 0, 0)")
+  expect(
+    getComputedStyle(document.querySelector(".nuilp .ps-label")!).color
+  ).toBe("rgb(0, 0, 0)")
 })
 
 it("uses the saved dark setting for newly opened CUNYfirst home content", async () => {
@@ -327,5 +379,7 @@ it("uses the saved dark setting for newly opened CUNYfirst home content", async 
     )
   )
   document.body.innerHTML = `<form id="PT_LANDINGPAGE"><div id="PT_WRAPPER"><div class="nuilp">Student Center</div></div></form>`
-  expect(getComputedStyle(document.querySelector(".nuilp")!).backgroundColor).toBe("rgb(44, 52, 66)")
+  expect(
+    getComputedStyle(document.querySelector(".nuilp")!).backgroundColor
+  ).toBe("rgb(44, 52, 66)")
 })

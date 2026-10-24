@@ -12,6 +12,7 @@ const pastelSurfaces = `.bc0, .bc1, .bc2, .bc3, .bc4, .bc5, .bc6, .bc7,
 const styles = `
 ${root} { color-scheme: dark; background-color: #20242c !important; }
 ${host("body")} { background-color: #20242c !important; color: #f1f5f9 !important; }
+${host(".auth-shell")} { background-color: #20242c !important; }
 
 /* Neutral surfaces from Schedule Builder and CUNY Login's public stylesheets.
    Keep background images, branded headers, calendar colors and status badges. */
@@ -22,6 +23,7 @@ ${host(`.white-background, .courses_bg, .main_menu, .helpinfo, .requirement,
   .course_cell_action, .linkBox, .share-link-input, .StuTableTitle, .StuTableData,
   .LegendLabel, .LegendItem, .selectize-dropdown, .selectize-input,
   .mdl-card, .mdl-dialog, #cboxLoadedContent, .form_wrapper, .login_form,
+  .login-container, .login-links,
   .row.two, .footer1, .footer2, #popup, .bottomAdvice, .enrollmentEncouragement,
   .tipbox, .nothing, #legend_headers, .disabled-term-selection,
   .action-required-hold .term-card-title, a.top_access_link,
@@ -38,6 +40,7 @@ ${host(`h1, h2, h3, h4, label, .p, .cuny-text, #popup p, #popup h2,
 ${host(".course_cell_option")}::before { color: #dbe4f0 !important; }
 ${host("a, .a")} { color: #a6c8ff !important; }
 ${host(".navigation a, .support-links a, .cuny_header a")} { color: #ffffff !important; }
+${host(".login-note, .login-links .accordion-toggle")} { color: #dbe4f0 !important; }
 
 ${host(`input:not([type=checkbox]):not([type=radio]):not([type=submit]):not([type=button]),
   select, textarea, option`)} {
@@ -51,6 +54,11 @@ ${host("button, input, select, textarea, a")}:focus-visible {
 ${host(".button, .small_button, .mdl-button:not(.mdl-button--accent), .nobuttonstyle")} {
   background-color: #394960 !important; background-image: none !important;
   color: #f1f5f9 !important; border-color: #56647a !important;
+}
+${host(".btn-toggle-password")} {
+  background-color: #394960 !important;
+  color: #f1f5f9 !important;
+  border-color: #56647a !important;
 }
 ${host(".main_menu a:hover, .term-card-title:hover, .advSearchButton:hover")} {
   background-color: #394960 !important;
