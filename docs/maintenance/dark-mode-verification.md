@@ -2,6 +2,10 @@
 
 Issue: [#11](https://github.com/StevenHuangYH/CUNY-Plus/issues/11). Verified on 2026-10-24 in Chrome with the locally installed CUNY Plus extension.
 
+## Regression found after the initial verification
+
+- A later live visit to the 2027 Spring Schedule Builder working screen exposed a white selected-course row behind light text, a light course label on a green course block, and black Advanced Search text on a dark button. Approximate contrast ratios were 1.1:1, 1.3:1, and 1.7:1 respectively. The Filters dialog also retained a dim subtitle. Issue #11 was reopened; the earlier timetable-only check did not cover these surfaces.
+
 ## Checks completed
 
 - One popup toggle changed the `data-cuny-plus-dark` state in already open CUNY Login, Schedule Builder, and Brightspace tabs without a refresh. Toggling off removed it from all three.
